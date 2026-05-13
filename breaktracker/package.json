@@ -1,0 +1,11 @@
+{
+  "name": "break-tracker",
+  "version": "1.0.0",
+  "description": "Internal team break tracking tool",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
