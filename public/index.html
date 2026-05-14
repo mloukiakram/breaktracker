@@ -2,87 +2,88 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Break Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --w:     #ffffff;
-  --off:   #f6f6f6;
-  --b1:    #e4e4e4;
-  --b2:    #cccccc;
-  --mu:    #999;
-  --mi:    #666;
-  --dk:    #2a2a2a;
-  --bk:    #0c0c0c;
-  --rad:   10px;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --sans:  'Figtree', -apple-system, sans-serif;
+  --w:#ffffff; --off:#f6f6f6; --b1:#e4e4e4; --b2:#cccccc;
+  --mu:#999; --mi:#666; --dk:#2a2a2a; --bk:#0c0c0c;
+  --rad:12px;
+  --serif:'DM Serif Display', Georgia, serif;
+  --sans:'Figtree', -apple-system, sans-serif;
 }
-html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -webkit-font-smoothing: antialiased; min-height: 100vh; font-size: 16px; }
 
-/* ── App shell ── */
-#app { max-width: 460px; margin: 0 auto; padding: 0 20px 80px; }
-
-/* ── Screen transitions ── */
+#app { max-width: 760px; margin: 0 auto; padding: 0 48px 100px; }
 .screen { display: none; }
 .screen.on { display: block; }
 
-/* ── Header ── */
-.hd { padding: 44px 0 28px; border-bottom: 1px solid var(--b1); margin-bottom: 28px; }
-.hd-eye  { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--mu); margin-bottom: 7px; }
-.hd-title { font-family: var(--serif); font-size: 28px; font-weight: 400; line-height: 1.1; }
-.hd-sub  { margin-top: 8px; font-size: 12px; color: var(--mu); font-variant-numeric: tabular-nums; }
+.hd { padding: 64px 0 36px; border-bottom: 1px solid var(--b1); margin-bottom: 40px; }
+.hd-eye  { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--mu); margin-bottom: 12px; }
+.hd-title { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.05; }
+.hd-sub  { margin-top: 14px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
 
-/* ── Nav ── */
-.nav { display: flex; border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 28px; background: var(--off); }
-.nv { flex: 1; padding: 11px 4px; font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--mu); background: transparent; border: none; border-right: 1px solid var(--b1); cursor: pointer; transition: all .13s; }
+.nav { display: flex; border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 36px; background: var(--off); }
+.nv { flex: 1; padding: 15px 6px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mu); background: transparent; border: none; border-right: 1px solid var(--b1); cursor: pointer; transition: all .13s; }
 .nv:last-child { border-right: none; }
 .nv.on { background: var(--w); color: var(--bk); box-shadow: 0 1px 4px rgba(0,0,0,.07); }
 .nv:hover:not(.on) { color: var(--dk); }
 
-/* ── Labels ── */
-.lbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mu); margin-bottom: 10px; }
+.lbl { font-size: 12px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--mu); margin-bottom: 14px; }
 
-/* ── Member grid (login) ── */
-.mg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
-.mc {
-  padding: 14px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w);
-  cursor: pointer; transition: all .13s; display: flex; align-items: center; gap: 11px; user-select: none;
-}
+.mg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 32px; }
+@media (max-width: 600px) { .mg { grid-template-columns: 1fr 1fr; } }
+.mc { padding: 18px 16px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; display: flex; align-items: center; gap: 14px; user-select: none; }
 .mc:hover { border-color: var(--b2); background: var(--off); }
 .mc.sel   { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.mc-init  { width: 32px; height: 32px; border-radius: 50%; background: var(--off); border: 1px solid var(--b1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--dk); flex-shrink: 0; transition: all .13s; }
+.mc-init  { width: 38px; height: 38px; border-radius: 50%; background: var(--off); border: 1px solid var(--b1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--dk); flex-shrink: 0; transition: all .13s; }
 .mc.sel .mc-init { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.18); color: var(--w); }
-.mc-n   { font-size: 14px; font-weight: 600; }
-.mc-s   { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); margin-top: 2px; }
+.mc-n   { font-size: 16px; font-weight: 600; }
+.mc-s   { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 3px; }
 .mc.sel .mc-s { color: rgba(255,255,255,.4); }
 
-/* ── PIN pad ── */
-.pin-wrap { padding: 20px 0 0; }
-.pin-dots { display: flex; justify-content: center; gap: 13px; margin-bottom: 32px; }
-.pd { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--b2); background: var(--w); transition: all .12s; }
-.pd.on { background: var(--bk); border-color: var(--bk); }
-.pin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; max-width: 210px; margin: 0 auto; }
-.pk { aspect-ratio: 1; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 18px; font-weight: 500; color: var(--bk); cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; }
+/* ── PIN ── */
+.pin-wrap { padding: 32px 0 0; max-width: 340px; margin: 0 auto; }
+.pin-input {
+  width: 100%;
+  padding: 18px 22px;
+  border: 1.5px solid var(--b1);
+  border-radius: var(--rad);
+  background: var(--w);
+  font-family: var(--sans);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 16px;
+  text-align: center;
+  color: var(--bk);
+  transition: border-color .13s;
+  margin-bottom: 8px;
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+.pin-input:focus { outline: none; border-color: var(--bk); }
+.pin-hint { text-align: center; font-size: 11px; color: var(--mu); margin-bottom: 28px; letter-spacing: .3px; }
+.pin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
+.pk { aspect-ratio: 1; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 22px; font-weight: 500; color: var(--bk); cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; }
 .pk:hover  { background: var(--off); border-color: var(--b2); }
 .pk:active { background: var(--b1); }
-.pk.del    { font-size: 13px; color: var(--mu); }
-.pin-err   { text-align: center; font-size: 12px; font-weight: 600; color: var(--dk); margin-top: 16px; min-height: 18px; letter-spacing: .2px; }
-.pin-back  { display: block; text-align: center; margin-top: 24px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; padding: 0; transition: color .12s; font-family: var(--sans); }
+.pk.del    { font-size: 16px; color: var(--mu); }
+.pin-err   { text-align: center; font-size: 13px; font-weight: 600; color: var(--dk); margin-top: 20px; min-height: 20px; }
+.pin-back  { display: block; text-align: center; margin: 28px auto 0; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .12s; font-family: var(--sans); }
 .pin-back:hover { color: var(--bk); }
 
-/* ── Break type grid ── */
-.bg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
-.bc { padding: 14px 15px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--dk); text-align: left; }
+/* ── Break grid ── */
+.bg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+.bc { padding: 22px 22px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--dk); text-align: left; }
 .bc:hover { border-color: var(--b2); background: var(--off); }
 .bc.sel   { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.bc-sub   { font-size: 11px; font-weight: 400; color: var(--mu); margin-top: 3px; }
-.bc.sel .bc-sub { color: rgba(255,255,255,.38); }
+.bc-sub   { font-size: 13px; font-weight: 400; color: var(--mu); margin-top: 5px; }
+.bc.sel .bc-sub { color: rgba(255,255,255,.4); }
 
 /* ── Buttons ── */
-.btn { width: 100%; padding: 15px 18px; border-radius: var(--rad); font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; cursor: pointer; border: none; transition: all .13s; }
+.btn { width: 100%; padding: 18px 22px; border-radius: var(--rad); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; transition: all .13s; }
 .btn-k { background: var(--bk); color: var(--w); }
 .btn-k:hover:not(:disabled) { background: var(--dk); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.13); }
 .btn-k:disabled { background: var(--b1); color: var(--mu); cursor: not-allowed; }
@@ -91,76 +92,81 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .btn-g { background: var(--w); color: var(--bk); border: 1px solid var(--b2); }
 .btn-g:hover { background: var(--off); }
 
-/* ── Active break panel ── */
-.ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 24px; }
-.ap-r { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--b1); }
+/* ── Active panel ── */
+.ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 28px; }
+.ap-r { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--b1); }
 .ap-r:last-child { border-bottom: none; }
-.ap-l { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mu); }
-.ap-v { font-size: 14px; font-weight: 600; }
-.ap-t { font-size: 30px; font-weight: 300; letter-spacing: 3px; font-variant-numeric: tabular-nums; }
+.ap-l { font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--mu); }
+.ap-v { font-size: 16px; font-weight: 600; }
+.ap-t { font-size: 44px; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; }
 
-/* ── Live list ── */
-.li-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--b1); }
+/* ── Live ── */
+.li-item { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--b1); }
 .li-item:last-child { border-bottom: none; }
-.li-n  { font-size: 14px; font-weight: 600; }
-.li-m  { font-size: 12px; color: var(--mu); margin-top: 2px; }
-.li-pill { font-size: 11px; font-weight: 700; letter-spacing: .4px; padding: 5px 10px; border: 1px solid var(--b2); border-radius: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.li-n  { font-size: 16px; font-weight: 600; }
+.li-m  { font-size: 13px; color: var(--mu); margin-top: 3px; }
+.li-pill { font-size: 12px; font-weight: 700; letter-spacing: .4px; padding: 7px 13px; border: 1px solid var(--b2); border-radius: 7px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .li-pill.ov { border-color: var(--bk); color: var(--bk); }
-.at-r  { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--b1); }
+.at-r  { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--b1); }
 .at-r:last-child { border-bottom: none; }
-.at-n  { font-size: 14px; font-weight: 500; color: var(--mu); }
-.at-t  { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); padding: 4px 9px; border: 1px solid var(--b1); border-radius: 5px; }
+.at-n  { font-size: 16px; font-weight: 500; color: var(--mu); }
+.at-t  { font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--mu); padding: 6px 11px; border: 1px solid var(--b1); border-radius: 6px; }
 
 /* ── Summary ── */
-.period-row { display: flex; gap: 6px; margin-bottom: 22px; }
-.pb { padding: 8px 13px; font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; border: 1px solid var(--b1); border-radius: 6px; background: var(--w); color: var(--mu); cursor: pointer; transition: all .12s; }
+.period-row { display: flex; gap: 8px; margin-bottom: 28px; }
+.pb { padding: 10px 18px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; border: 1px solid var(--b1); border-radius: 7px; background: var(--w); color: var(--mu); cursor: pointer; transition: all .12s; }
 .pb.on { border-color: var(--bk); background: var(--bk); color: var(--w); }
 .pb:hover:not(.on) { color: var(--dk); border-color: var(--b2); }
-.stats3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
-.sb { padding: 14px 12px; border: 1px solid var(--b1); border-radius: var(--rad); }
-.sb-n { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.sb-l { font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 4px; }
-.sm { padding: 15px 0; border-bottom: 1px solid var(--b1); }
+.stats3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
+.sb { padding: 22px 18px; border: 1px solid var(--b1); border-radius: var(--rad); }
+.sb-n { font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sb-l { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; color: var(--mu); margin-top: 6px; }
+.sm { padding: 20px 0; border-bottom: 1px solid var(--b1); }
 .sm:last-child { border-bottom: none; }
-.sm-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.sm-n   { font-size: 14px; font-weight: 700; }
-.sm-v   { font-size: 12px; font-weight: 600; color: var(--mi); font-variant-numeric: tabular-nums; }
-.sm-bar { height: 2px; background: var(--b1); border-radius: 1px; margin-bottom: 8px; }
-.sm-fill { height: 100%; background: var(--bk); border-radius: 1px; transition: width .5s ease; }
-.sm-types { display: flex; flex-wrap: wrap; gap: 5px; }
-.sm-ty { font-size: 10px; font-weight: 600; color: var(--mi); padding: 3px 8px; border: 1px solid var(--b1); border-radius: 4px; }
+.sm-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.sm-n   { font-size: 16px; font-weight: 700; }
+.sm-v   { font-size: 13px; font-weight: 600; color: var(--mi); font-variant-numeric: tabular-nums; }
+.sm-bar { height: 3px; background: var(--b1); border-radius: 2px; margin-bottom: 12px; }
+.sm-fill { height: 100%; background: var(--bk); border-radius: 2px; transition: width .5s ease; }
+.sm-types { display: flex; flex-wrap: wrap; gap: 6px; }
+.sm-ty { font-size: 11px; font-weight: 600; color: var(--mi); padding: 4px 10px; border: 1px solid var(--b1); border-radius: 5px; }
 
-/* ── Recent log ── */
-.rl-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--b1); }
+/* ── Recent ── */
+.rl-item { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--b1); }
 .rl-item:last-child { border-bottom: none; }
-.rl-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--b2); flex-shrink: 0; }
-.rl-info { font-size: 13px; font-weight: 500; }
-.rl-sub  { font-size: 11px; color: var(--mu); margin-top: 2px; }
-.rl-dur  { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--mi); white-space: nowrap; }
+.rl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--b2); flex-shrink: 0; }
+.rl-info { font-size: 14px; font-weight: 500; }
+.rl-sub  { font-size: 12px; color: var(--mu); margin-top: 3px; }
+.rl-dur  { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--mi); white-space: nowrap; }
 
 /* ── Misc ── */
-.divider { border: none; border-top: 1px solid var(--b1); margin: 20px 0; }
-.empty   { padding: 40px 0; text-align: center; font-size: 13px; color: var(--mu); }
-.badge-member { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--off); border: 1px solid var(--b1); border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 24px; }
-.logout-btn { background: none; border: none; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; margin-left: auto; }
+.divider { border: none; border-top: 1px solid var(--b1); margin: 24px 0; }
+.empty   { padding: 60px 0; text-align: center; font-size: 14px; color: var(--mu); }
+.badge-member { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--off); border: 1px solid var(--b1); border-radius: 30px; font-size: 14px; font-weight: 600; }
+.logout-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; margin-left: auto; }
 .logout-btn:hover { color: var(--bk); }
-.rr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.text-btn { background: none; border: none; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
+.rr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.text-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
 .text-btn:hover { color: var(--bk); }
 
-/* ── Toast ── */
-.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(14px); opacity: 0; background: var(--bk); color: var(--w); font-size: 12px; font-weight: 600; letter-spacing: .4px; padding: 10px 18px; border-radius: 8px; transition: all .22s ease; z-index: 99; pointer-events: none; white-space: nowrap; }
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(14px); opacity: 0; background: var(--bk); color: var(--w); font-size: 13px; font-weight: 600; letter-spacing: .4px; padding: 12px 22px; border-radius: 9px; transition: all .22s ease; z-index: 99; pointer-events: none; white-space: nowrap; }
 .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ── Spinner ── */
-.sp { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,.25); border-top-color: rgba(255,255,255,.85); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 6px; }
+.sp { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: rgba(255,255,255,.85); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 7px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 600px) {
+  #app { padding: 0 20px 80px; }
+  .hd { padding: 44px 0 28px; margin-bottom: 28px; }
+  .hd-title { font-size: 32px; }
+  .bg, .stats3 { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ═══ LOGIN SCREEN ═══ -->
+  <!-- ═══ LOGIN ═══ -->
   <div id="s-login" class="screen on">
     <div class="hd">
       <div class="hd-eye">Team Operations</div>
@@ -169,13 +175,14 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
     </div>
     <div class="lbl">Select Your Name</div>
     <div class="mg" id="login-members"></div>
-    <!-- PIN entry (shown after member selected) -->
+
     <div id="pin-wrap" class="pin-wrap" style="display:none">
-      <div class="lbl" style="text-align:center;margin-bottom:20px" id="pin-greeting">Enter your PIN</div>
-      <div class="pin-dots">
-        <div class="pd" id="pd0"></div><div class="pd" id="pd1"></div>
-        <div class="pd" id="pd2"></div><div class="pd" id="pd3"></div>
-      </div>
+      <div class="lbl" style="text-align:center;margin-bottom:18px" id="pin-greeting">Enter your PIN</div>
+      <input type="password" id="pin-input" class="pin-input"
+             inputmode="numeric" pattern="[0-9]*" maxlength="4"
+             autocomplete="off" autocorrect="off" spellcheck="false"
+             placeholder="••••">
+      <div class="pin-hint">Type your PIN or use the keypad</div>
       <div class="pin-grid">
         <button class="pk" onclick="pk('1')">1</button>
         <button class="pk" onclick="pk('2')">2</button>
@@ -195,7 +202,7 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
     </div>
   </div>
 
-  <!-- ═══ MAIN APP ═══ -->
+  <!-- ═══ APP ═══ -->
   <div id="s-app" class="screen">
     <div class="hd">
       <div class="hd-eye">Team Operations</div>
@@ -203,31 +210,28 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       <div class="hd-sub" id="app-clock">--:--:--</div>
     </div>
 
-    <!-- Member badge + logout -->
-    <div style="display:flex;align-items:center;margin-bottom:24px;gap:10px;">
-      <div class="badge-member" id="member-badge" style="margin-bottom:0">
-        <span id="badge-init" style="width:22px;height:22px;border-radius:50%;background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.4px"></span>
+    <div style="display:flex;align-items:center;margin-bottom:32px;gap:14px;">
+      <div class="badge-member">
+        <span id="badge-init" style="width:26px;height:26px;border-radius:50%;background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.4px"></span>
         <span id="badge-name"></span>
       </div>
       <button class="logout-btn" onclick="logout()">Sign Out</button>
     </div>
 
-    <!-- Nav (admin gets 3 tabs, members get 2) -->
     <nav class="nav" id="main-nav">
       <button class="nv on" onclick="goTab('log')">Log Break</button>
       <button class="nv" onclick="goTab('live')">Live Status</button>
       <button class="nv" id="nav-summary" style="display:none" onclick="goTab('summary')">Summary</button>
     </nav>
 
-    <!-- ── Log Break ── -->
     <div id="tab-log" class="screen on">
       <div id="ui-start">
         <div class="lbl">Type of Break</div>
         <div class="bg">
-          <button class="bc" onclick="selBreak('Coffee')"  id="bt-Coffee" >Coffee <div class="bc-sub">Coffee break</div></button>
-          <button class="bc" onclick="selBreak('Prayer')"  id="bt-Prayer" >Prayer <div class="bc-sub">Prayer break</div></button>
-          <button class="bc" onclick="selBreak('Phone')"  id="bt-Phone" >Phone Call <div class="bc-sub">Phone Call</div></button>
-          <button class="bc" onclick="selBreak('Other')"   id="bt-Other"  >Other  <div class="bc-sub">Any other reason</div></button>
+          <button class="bc" data-type="Coffee"        onclick="selBreak('Coffee')">Coffee<div class="bc-sub">Coffee break</div></button>
+          <button class="bc" data-type="Restroom (WC)" onclick="selBreak('Restroom (WC)')">Restroom (WC)<div class="bc-sub">Restroom break</div></button>
+          <button class="bc" data-type="Prayer"        onclick="selBreak('Prayer')">Prayer<div class="bc-sub">Prayer break</div></button>
+          <button class="bc" data-type="Other"         onclick="selBreak('Other')">Other<div class="bc-sub">Any other reason</div></button>
         </div>
         <button class="btn btn-k" id="btn-start" onclick="doStart()" disabled>Select a break type</button>
       </div>
@@ -235,13 +239,12 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
         <div class="ap">
           <div class="ap-r"><span class="ap-l">Break Type</span><span class="ap-v" id="ae-type">—</span></div>
           <div class="ap-r"><span class="ap-l">Started At</span><span class="ap-v" id="ae-start">—</span></div>
-          <div class="ap-r" style="justify-content:center;padding:22px 18px;"><span class="ap-t" id="ae-timer">00:00</span></div>
+          <div class="ap-r" style="justify-content:center;padding:28px 22px;"><span class="ap-t" id="ae-timer">00:00</span></div>
         </div>
         <button class="btn btn-o" onclick="doEnd()">Back to Post</button>
       </div>
     </div>
 
-    <!-- ── Live Status ── -->
     <div id="tab-live" class="screen">
       <div class="rr">
         <div class="lbl" style="margin-bottom:0">Currently on Break</div>
@@ -250,13 +253,12 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       <div id="live-content"><div class="empty">Loading...</div></div>
     </div>
 
-    <!-- ── Summary (admin) ── -->
     <div id="tab-summary" class="screen">
       <div class="rr">
-        <div style="font-family:var(--serif);font-size:22px;font-weight:400;">Summary</div>
+        <div style="font-family:var(--serif);font-size:28px;font-weight:400;">Summary</div>
         <button class="text-btn" onclick="loadSummary(curPeriod)">Refresh</button>
       </div>
-      <div class="period-row" style="margin-top:16px;">
+      <div class="period-row" style="margin-top:20px;">
         <button class="pb on" onclick="loadSummary('today')"  id="pb-today">Today</button>
         <button class="pb"    onclick="loadSummary('week')"   id="pb-week">Week</button>
         <button class="pb"    onclick="loadSummary('month')"  id="pb-month">Month</button>
@@ -264,31 +266,27 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       <div id="summary-content"><div class="empty">Loading...</div></div>
     </div>
 
-  </div><!-- /s-app -->
+  </div>
 
-</div><!-- /app -->
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────
-// Change this to your Netlify site URL during deployment
 const API = window.location.hostname === 'localhost'
   ? 'http://localhost:8888/api'
   : '/api';
 
 const MEMBERS = ['Oumaima','Charif','Khalid','Imane'];
-const ADMIN   = 'Akram'; // must match ADMIN_NAME env var
+const ADMIN   = 'Akram';
 
-// ─── STATE ───────────────────────────────────────────────────
 let session     = JSON.parse(localStorage.getItem('bt_session') || 'null');
 let loginMember = null;
 let loginPin    = '';
 let selBrk      = null;
 let timerInt    = null;
 let curPeriod   = 'today';
-let activeCache = {};   // local optimistic cache
+let activeCache = {};
 
-// ─── CLOCK ───────────────────────────────────────────────────
 function tickClock() {
   const t = new Date().toLocaleTimeString('en-GB', { hour12: false });
   const a = document.getElementById('app-clock');
@@ -298,27 +296,21 @@ function tickClock() {
 }
 setInterval(tickClock, 1000); tickClock();
 
-// ─── API HELPER ──────────────────────────────────────────────
 async function api(path, opts = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (session) headers['Authorization'] = `Bearer ${session.member}:${session.token}`;
   try {
     const r = await fetch(API + path, { ...opts, headers: { ...headers, ...(opts.headers || {}) } });
     return await r.json();
-  } catch {
-    return { error: 'Network error' };
-  }
+  } catch { return { error: 'Network error' }; }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────
 function init() {
   buildLoginGrid();
-  if (session) {
-    loadApp();
-  }
+  bindPinInput();
+  if (session) loadApp();
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────
 function buildLoginGrid() {
   const allMembers = [...MEMBERS, ADMIN];
   const g = document.getElementById('login-members');
@@ -339,8 +331,10 @@ function pickLoginMember(name) {
   document.getElementById('lm-' + name)?.classList.add('sel');
   document.getElementById('pin-greeting').textContent = `PIN for ${name}`;
   document.getElementById('pin-err').textContent = '';
-  renderPinDots();
+  document.getElementById('pin-input').value = '';
   document.getElementById('pin-wrap').style.display = 'block';
+  // Auto-focus the input for keyboard typing
+  setTimeout(() => document.getElementById('pin-input').focus(), 100);
 }
 
 function backToNames() {
@@ -349,16 +343,38 @@ function backToNames() {
   document.getElementById('pin-wrap').style.display = 'none';
 }
 
+// ── Bind input events (manual typing) ──
+function bindPinInput() {
+  const input = document.getElementById('pin-input');
+  input.addEventListener('input', e => {
+    // Only allow digits
+    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 4);
+    e.target.value = cleaned;
+    loginPin = cleaned;
+    document.getElementById('pin-err').textContent = '';
+    if (loginPin.length === 4) doLogin();
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && loginPin.length === 4) doLogin();
+  });
+}
+
+// ── Keypad handlers (also sync to input) ──
 function pk(k) {
   if (loginPin.length >= 4) return;
-  loginPin += k; renderPinDots();
+  loginPin += k;
+  document.getElementById('pin-input').value = loginPin;
   if (loginPin.length === 4) doLogin();
 }
-function pd() { loginPin = loginPin.slice(0,-1); renderPinDots(); document.getElementById('pin-err').textContent = ''; }
-function pc() { loginPin = ''; renderPinDots(); document.getElementById('pin-err').textContent = ''; }
-
-function renderPinDots() {
-  for (let i = 0; i < 4; i++) document.getElementById('pd'+i).classList.toggle('on', i < loginPin.length);
+function pd() {
+  loginPin = loginPin.slice(0,-1);
+  document.getElementById('pin-input').value = loginPin;
+  document.getElementById('pin-err').textContent = '';
+}
+function pc() {
+  loginPin = '';
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-err').textContent = '';
 }
 
 async function doLogin() {
@@ -368,11 +384,10 @@ async function doLogin() {
   });
   if (res.error) {
     document.getElementById('pin-err').textContent = 'Incorrect PIN — try again.';
-    document.querySelectorAll('.pd').forEach(d => {
-      d.style.background = '#111'; d.style.borderColor = '#111';
-      setTimeout(() => { d.style.background = ''; d.style.borderColor = ''; }, 360);
-    });
-    setTimeout(() => { loginPin = ''; renderPinDots(); }, 440);
+    const input = document.getElementById('pin-input');
+    input.style.borderColor = '#111';
+    setTimeout(() => { input.style.borderColor = ''; }, 380);
+    setTimeout(() => { loginPin = ''; input.value = ''; input.focus(); }, 460);
     return;
   }
   session = { member: res.member, token: res.token, isAdmin: res.isAdmin };
@@ -389,18 +404,12 @@ function logout() {
   backToNames();
 }
 
-// ─── APP ──────────────────────────────────────────────────────
 async function loadApp() {
   show('s-app'); hide('s-login');
-
-  // Set badge
   document.getElementById('badge-init').textContent = initials(session.member);
   document.getElementById('badge-name').textContent = session.member;
-
-  // Admin nav tab
   if (session.isAdmin) document.getElementById('nav-summary').style.display = 'block';
 
-  // Check if member is already on a break
   const me = await api('/me');
   if (me.onBreak && me.breakInfo) {
     activeCache[session.member] = me.breakInfo;
@@ -408,11 +417,9 @@ async function loadApp() {
   } else {
     showStartUI();
   }
-
   goTab('log');
 }
 
-// ─── TAB NAVIGATION ──────────────────────────────────────────
 const TAB_IDS = ['log','live','summary'];
 function goTab(name) {
   document.querySelectorAll('.nv').forEach((b,i) => b.classList.toggle('on', TAB_IDS[i] === name));
@@ -423,14 +430,13 @@ function goTab(name) {
   if (name === 'summary') loadSummary(curPeriod);
 }
 
-// ─── BREAK: START ─────────────────────────────────────────────
 function selBreak(t) {
   selBrk = t;
   document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
-  document.getElementById('bt-'+t).classList.add('sel');
+  document.querySelector(`.bc[data-type="${t}"]`)?.classList.add('sel');
   const b = document.getElementById('btn-start');
   b.disabled = false;
-  b.textContent = 'Start ' + t + ' Break';
+  b.textContent = 'Start Break';
 }
 
 function showStartUI() {
@@ -465,7 +471,6 @@ async function doStart() {
   btn.disabled = true;
   btn.innerHTML = '<span class="sp"></span>Logging...';
 
-  // Optimistic: update UI immediately
   const now = new Date();
   const info = { breakType: selBrk, startTime: toTimeStr(now), startTs: now.getTime() };
   activeCache[session.member] = info;
@@ -474,7 +479,6 @@ async function doStart() {
 
   const res = await api('/break/start', { method: 'POST', body: JSON.stringify({ breakType: selBrk }) });
   if (res.error) {
-    // Rollback
     delete activeCache[session.member];
     showStartUI(); toast(res.error);
   } else {
@@ -487,7 +491,6 @@ async function doEnd() {
   btn.disabled = true;
   btn.innerHTML = '<span class="sp"></span>Saving...';
 
-  // Optimistic
   const info = activeCache[session.member];
   delete activeCache[session.member];
   showStartUI();
@@ -495,7 +498,6 @@ async function doEnd() {
 
   const res = await api('/break/end', { method: 'POST' });
   if (res.error) {
-    // Rollback
     activeCache[session.member] = info;
     showEndUI(info); toast(res.error);
   } else {
@@ -503,7 +505,6 @@ async function doEnd() {
   }
 }
 
-// ─── LIVE STATUS ──────────────────────────────────────────────
 async function loadLive() {
   document.getElementById('live-content').innerHTML = '<div class="empty">Loading...</div>';
   const res = await api('/breaks/active');
@@ -524,7 +525,7 @@ async function loadLive() {
     });
   }
   if (atPost.length) {
-    if (onBreak.length) html += `<div style="height:14px"></div><div class="lbl">At Post</div>`;
+    if (onBreak.length) html += `<div style="height:20px"></div><div class="lbl">At Post</div>`;
     atPost.forEach(m => {
       html += `<div class="at-r"><span class="at-n">${m}</span><span class="at-t">At Post</span></div>`;
     });
@@ -532,7 +533,6 @@ async function loadLive() {
   document.getElementById('live-content').innerHTML = html || '<div class="empty">Everyone is at their post</div>';
 }
 
-// ─── SUMMARY ─────────────────────────────────────────────────
 async function loadSummary(period) {
   curPeriod = period;
   document.querySelectorAll('.pb').forEach(b => b.classList.remove('on'));
@@ -554,13 +554,10 @@ async function loadSummary(period) {
     <div class="sb"><div class="sb-n">${total}m</div><div class="sb-l">Total</div></div>
     <div class="sb"><div class="sb-n">${avg}m</div><div class="sb-l">Avg</div></div>
   </div>
-  <div class="lbl">Per Member</div><hr class="divider" style="margin-top:10px;margin-bottom:0">`;
+  <div class="lbl">Per Member</div><hr class="divider" style="margin-top:14px;margin-bottom:0">`;
 
   sorted.forEach(([name, st]) => {
     const pct   = maxT > 0 ? Math.round(st.total / maxT * 100) : 0;
-    const flags = [];
-    if (st.total > 60)   flags.push('High total');
-    if (st.longest > 25) flags.push('Long break');
     const types = Object.entries(st.types).sort((a,b)=>b[1]-a[1])
       .map(([t,n]) => `<span class="sm-ty">${t} &times;${n}</span>`).join('');
     html += `<div class="sm">
@@ -587,7 +584,6 @@ async function loadSummary(period) {
   document.getElementById('summary-content').innerHTML = html;
 }
 
-// ─── UTILS ───────────────────────────────────────────────────
 function initials(name) { return name.slice(0,2).toUpperCase(); }
 function pad(n) { return String(n).padStart(2,'0'); }
 function toTimeStr(d) { return d.toLocaleTimeString('en-GB', { hour12: false }); }
