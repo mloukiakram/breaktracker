@@ -108,6 +108,18 @@ exports.handler = async (event) => {
   const sheets  = getSheets();
   const qs      = event.queryStringParameters || {};
 
+  // List of valid member names (admin can act on these)
+  const validMembers = new Set([...Object.keys(memberPins), adminName]);
+
+  // Helper: resolve who an action is for. Admin can specify targetMember.
+  function resolveTarget() {
+    const target = body.targetMember;
+    if (!target || target === authedMember) return { member: authedMember, byAdmin: false };
+    if (!isAdmin) return { error: 'Only admin can act on behalf of others' };
+    if (!validMembers.has(target)) return { error: 'Invalid target member' };
+    return { member: target, byAdmin: true };
+  }
+
   try {
     if (path === '/me' && method === 'GET') {
       const active = await readActive(sheets);
@@ -118,7 +130,6 @@ exports.handler = async (event) => {
       });
     }
 
-    // ── Personal stats for today ──
     if (path === '/me/stats' && method === 'GET') {
       const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: LOG_RANGE });
       const rows = (res.data.values || []).slice(1).filter(r => r[0] && r[1] === authedMember);
@@ -127,8 +138,7 @@ exports.handler = async (event) => {
       const total = todays.reduce((s, r) => s + (parseInt(r[5]) || 0), 0);
       const last  = todays[todays.length - 1];
       return json(200, {
-        count: todays.length,
-        totalMins: total,
+        count: todays.length, totalMins: total,
         lastBreak: last ? { type: last[2], time: last[4] } : null
       });
     }
@@ -136,31 +146,39 @@ exports.handler = async (event) => {
     if (path === '/break/start' && method === 'POST') {
       const { breakType } = body;
       if (!breakType) return json(400, { error: 'Break type required' });
+      const r = resolveTarget();
+      if (r.error) return json(403, { error: r.error });
+      const forMember = r.member;
+
       const active = await readActive(sheets);
-      if (active[authedMember]) return json(400, { error: 'You already have an active break' });
+      if (active[forMember]) return json(400, { error: `${forMember} already has an active break` });
       const now = new Date();
-      active[authedMember] = { breakType, startTime: toTimeStr(now), startTs: now.getTime() };
+      active[forMember] = { breakType, startTime: toTimeStr(now), startTs: now.getTime() };
       await writeActive(sheets, active);
-      return json(200, { startTime: toTimeStr(now), timestamp: now.getTime() });
+      return json(200, { startTime: toTimeStr(now), timestamp: now.getTime(), member: forMember, byAdmin: r.byAdmin });
     }
 
     if (path === '/break/end' && method === 'POST') {
+      const r = resolveTarget();
+      if (r.error) return json(403, { error: r.error });
+      const forMember = r.member;
+
       const active = await readActive(sheets);
-      const entry  = active[authedMember];
-      if (!entry) return json(400, { error: 'No active break found' });
+      const entry  = active[forMember];
+      if (!entry) return json(400, { error: `No active break found for ${forMember}` });
       const now = new Date();
       const duration = Math.round((now.getTime() - entry.startTs) / 60000);
       await ensureLogHeader(sheets);
       await sheets.spreadsheets.values.append({
         spreadsheetId: SHEET_ID(), range: LOG_RANGE, valueInputOption: 'RAW',
         requestBody: { values: [[
-          toDateStr(now), authedMember, entry.breakType, entry.startTime,
+          toDateStr(now), forMember, entry.breakType, entry.startTime,
           toTimeStr(now), duration, now.toLocaleDateString('en-GB', { weekday: 'long' })
         ]]}
       });
-      delete active[authedMember];
+      delete active[forMember];
       await writeActive(sheets, active);
-      return json(200, { duration, endTime: toTimeStr(now) });
+      return json(200, { duration, endTime: toTimeStr(now), member: forMember, byAdmin: r.byAdmin });
     }
 
     if (path === '/breaks/active' && method === 'GET') {
