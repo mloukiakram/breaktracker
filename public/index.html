@@ -16,70 +16,73 @@
 }
 html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -webkit-font-smoothing: antialiased; min-height: 100vh; font-size: 16px; }
 
-#app { max-width: 760px; margin: 0 auto; padding: 0 48px 100px; }
+#app { max-width: 1180px; margin: 0 auto; padding: 0 48px 100px; }
 .screen { display: none; }
 .screen.on { display: block; }
 
-.hd { padding: 64px 0 36px; border-bottom: 1px solid var(--b1); margin-bottom: 40px; }
+.hd { padding: 56px 0 32px; border-bottom: 1px solid var(--b1); margin-bottom: 36px; }
+.hd-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
 .hd-eye  { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--mu); margin-bottom: 12px; }
-.hd-title { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.05; }
-.hd-sub  { margin-top: 14px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
-
-.nav { display: flex; border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 36px; background: var(--off); }
-.nv { flex: 1; padding: 15px 6px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mu); background: transparent; border: none; border-right: 1px solid var(--b1); cursor: pointer; transition: all .13s; }
-.nv:last-child { border-right: none; }
-.nv.on { background: var(--w); color: var(--bk); box-shadow: 0 1px 4px rgba(0,0,0,.07); }
-.nv:hover:not(.on) { color: var(--dk); }
+.hd-title { font-family: var(--serif); font-size: 42px; font-weight: 400; line-height: 1.05; }
+.hd-sub  { margin-top: 12px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
+.hd-actions { display: flex; align-items: center; gap: 14px; }
 
 .lbl { font-size: 12px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--mu); margin-bottom: 14px; }
 
+/* ── Two-column layout ── */
+.layout { display: grid; grid-template-columns: 1fr; gap: 36px; }
+@media (min-width: 920px) {
+  .layout { grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
+  .side    { position: sticky; top: 28px; }
+}
+
+/* ── Member badge + actions ── */
+.badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+.badge-member { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--off); border: 1px solid var(--b1); border-radius: 30px; font-size: 14px; font-weight: 600; }
+.badge-init { width: 26px; height: 26px; border-radius: 50%; background: var(--b1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; letter-spacing: .4px; }
+.icon-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
+.icon-btn:hover { color: var(--bk); }
+.icon-btn.danger:hover { color: var(--bk); }
+
+/* ── Login member grid ── */
 .mg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 32px; }
 @media (max-width: 600px) { .mg { grid-template-columns: 1fr 1fr; } }
 .mc { padding: 18px 16px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; display: flex; align-items: center; gap: 14px; user-select: none; }
 .mc:hover { border-color: var(--b2); background: var(--off); }
-.mc.sel   { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.mc-init  { width: 38px; height: 38px; border-radius: 50%; background: var(--off); border: 1px solid var(--b1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--dk); flex-shrink: 0; transition: all .13s; }
+.mc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
+.mc-init { width: 38px; height: 38px; border-radius: 50%; background: var(--off); border: 1px solid var(--b1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--dk); flex-shrink: 0; transition: all .13s; }
 .mc.sel .mc-init { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.18); color: var(--w); }
-.mc-n   { font-size: 16px; font-weight: 600; }
-.mc-s   { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 3px; }
+.mc-n { font-size: 16px; font-weight: 600; }
+.mc-s { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 3px; }
 .mc.sel .mc-s { color: rgba(255,255,255,.4); }
 
 /* ── PIN ── */
 .pin-wrap { padding: 32px 0 0; max-width: 340px; margin: 0 auto; }
-.pin-input {
-  width: 100%;
-  padding: 18px 22px;
-  border: 1.5px solid var(--b1);
-  border-radius: var(--rad);
-  background: var(--w);
-  font-family: var(--sans);
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: 16px;
-  text-align: center;
-  color: var(--bk);
-  transition: border-color .13s;
-  margin-bottom: 8px;
-  -webkit-text-security: disc;
-  text-security: disc;
-}
+.pin-input { width: 100%; padding: 18px 22px; border: 1.5px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 28px; font-weight: 500; letter-spacing: 16px; text-align: center; color: var(--bk); transition: border-color .13s; margin-bottom: 8px; -webkit-text-security: disc; }
 .pin-input:focus { outline: none; border-color: var(--bk); }
 .pin-hint { text-align: center; font-size: 11px; color: var(--mu); margin-bottom: 28px; letter-spacing: .3px; }
 .pin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
 .pk { aspect-ratio: 1; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 22px; font-weight: 500; color: var(--bk); cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; }
-.pk:hover  { background: var(--off); border-color: var(--b2); }
+.pk:hover { background: var(--off); border-color: var(--b2); }
 .pk:active { background: var(--b1); }
-.pk.del    { font-size: 16px; color: var(--mu); }
-.pin-err   { text-align: center; font-size: 13px; font-weight: 600; color: var(--dk); margin-top: 20px; min-height: 20px; }
-.pin-back  { display: block; text-align: center; margin: 28px auto 0; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .12s; font-family: var(--sans); }
+.pk.del { font-size: 16px; color: var(--mu); }
+.pin-err { text-align: center; font-size: 13px; font-weight: 600; color: var(--dk); margin-top: 20px; min-height: 20px; }
+.pin-back { display: block; text-align: center; margin: 28px auto 0; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .12s; font-family: var(--sans); }
 .pin-back:hover { color: var(--bk); }
+
+/* ── Personal stat strip ── */
+.stat-strip { display: flex; align-items: center; gap: 24px; padding: 16px 20px; background: var(--off); border: 1px solid var(--b1); border-radius: var(--rad); margin-bottom: 28px; flex-wrap: wrap; }
+.stat-cell { display: flex; flex-direction: column; gap: 3px; }
+.stat-cell-l { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--mu); }
+.stat-cell-v { font-size: 16px; font-weight: 700; color: var(--bk); font-variant-numeric: tabular-nums; }
+.stat-divider { width: 1px; height: 28px; background: var(--b1); }
 
 /* ── Break grid ── */
 .bg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
 .bc { padding: 22px 22px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--dk); text-align: left; }
 .bc:hover { border-color: var(--b2); background: var(--off); }
-.bc.sel   { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.bc-sub   { font-size: 13px; font-weight: 400; color: var(--mu); margin-top: 5px; }
+.bc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
+.bc-sub { font-size: 13px; font-weight: 400; color: var(--mu); margin-top: 5px; }
 .bc.sel .bc-sub { color: rgba(255,255,255,.4); }
 
 /* ── Buttons ── */
@@ -93,26 +96,45 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .btn-g:hover { background: var(--off); }
 
 /* ── Active panel ── */
-.ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 28px; }
+.ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 24px; transition: border-color .3s; }
+.ap.long { border-color: var(--dk); }
 .ap-r { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--b1); }
 .ap-r:last-child { border-bottom: none; }
 .ap-l { font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--mu); }
 .ap-v { font-size: 16px; font-weight: 600; }
-.ap-t { font-size: 44px; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; }
+.ap-t { font-size: 44px; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; transition: color .3s; }
+.ap.long .ap-t { color: var(--bk); font-weight: 500; }
+.ap-warn { padding: 14px 22px; background: var(--off); border-top: 1px solid var(--b1); display: flex; align-items: center; gap: 10px; }
+.ap-warn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
+.ap-warn-text { font-size: 12px; font-weight: 600; letter-spacing: .3px; color: var(--dk); }
 
-/* ── Live ── */
-.li-item { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--b1); }
-.li-item:last-child { border-bottom: none; }
-.li-n  { font-size: 16px; font-weight: 600; }
-.li-m  { font-size: 13px; color: var(--mu); margin-top: 3px; }
-.li-pill { font-size: 12px; font-weight: 700; letter-spacing: .4px; padding: 7px 13px; border: 1px solid var(--b2); border-radius: 7px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.li-pill.ov { border-color: var(--bk); color: var(--bk); }
-.at-r  { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--b1); }
-.at-r:last-child { border-bottom: none; }
-.at-n  { font-size: 16px; font-weight: 500; color: var(--mu); }
-.at-t  { font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--mu); padding: 6px 11px; border: 1px solid var(--b1); border-radius: 6px; }
+/* ── Sidebar ── */
+.side-card { border: 1px solid var(--b1); border-radius: var(--rad); padding: 22px 20px; background: var(--w); }
+.side-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.side-title { font-family: var(--serif); font-size: 22px; font-weight: 400; }
+.side-pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--bk); animation: pulse 2s ease-in-out infinite; }
+.side-section { font-size: 10px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mu); margin: 14px 0 10px; }
+.side-section:first-child { margin-top: 0; }
 
-/* ── Summary ── */
+.si-item { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--b1); gap: 8px; }
+.si-item:last-of-type { border-bottom: none; }
+.si-info { min-width: 0; flex: 1; }
+.si-name-row { display: flex; align-items: center; gap: 7px; }
+.si-overdue-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
+.si-n { font-size: 14px; font-weight: 600; }
+.si-m { font-size: 11px; color: var(--mu); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.si-pill { font-size: 11px; font-weight: 700; padding: 4px 9px; border: 1px solid var(--b2); border-radius: 5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.si-pill.ov { border-color: var(--bk); color: var(--bk); }
+.si-at-r { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; }
+.si-at-n { font-size: 13px; font-weight: 500; color: var(--mu); }
+.si-at-t { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); padding: 3px 8px; border: 1px solid var(--b1); border-radius: 4px; }
+.side-empty { text-align: center; padding: 16px 0; font-size: 12px; color: var(--mu); }
+.side-refresh { font-size: 10px; color: var(--mu); margin-top: 14px; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: .3px; }
+
+/* ── Summary view ── */
+.summary-toggle { display: inline-flex; padding: 4px; border: 1px solid var(--b1); border-radius: 10px; background: var(--off); margin-bottom: 28px; }
+.st-btn { padding: 9px 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; border: none; background: transparent; color: var(--mu); cursor: pointer; border-radius: 7px; transition: all .12s; }
+.st-btn.on { background: var(--w); color: var(--bk); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
 .period-row { display: flex; gap: 8px; margin-bottom: 28px; }
 .pb { padding: 10px 18px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; border: 1px solid var(--b1); border-radius: 7px; background: var(--w); color: var(--mu); cursor: pointer; transition: all .12s; }
 .pb.on { border-color: var(--bk); background: var(--bk); color: var(--w); }
@@ -124,42 +146,39 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .sm { padding: 20px 0; border-bottom: 1px solid var(--b1); }
 .sm:last-child { border-bottom: none; }
 .sm-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-.sm-n   { font-size: 16px; font-weight: 700; }
-.sm-v   { font-size: 13px; font-weight: 600; color: var(--mi); font-variant-numeric: tabular-nums; }
+.sm-n { font-size: 16px; font-weight: 700; }
+.sm-v { font-size: 13px; font-weight: 600; color: var(--mi); font-variant-numeric: tabular-nums; }
 .sm-bar { height: 3px; background: var(--b1); border-radius: 2px; margin-bottom: 12px; }
 .sm-fill { height: 100%; background: var(--bk); border-radius: 2px; transition: width .5s ease; }
 .sm-types { display: flex; flex-wrap: wrap; gap: 6px; }
 .sm-ty { font-size: 11px; font-weight: 600; color: var(--mi); padding: 4px 10px; border: 1px solid var(--b1); border-radius: 5px; }
 
-/* ── Recent ── */
 .rl-item { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--b1); }
 .rl-item:last-child { border-bottom: none; }
-.rl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--b2); flex-shrink: 0; }
+.rl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--b2); }
 .rl-info { font-size: 14px; font-weight: 500; }
-.rl-sub  { font-size: 12px; color: var(--mu); margin-top: 3px; }
-.rl-dur  { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--mi); white-space: nowrap; }
+.rl-sub { font-size: 12px; color: var(--mu); margin-top: 3px; }
+.rl-dur { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--mi); }
 
-/* ── Misc ── */
 .divider { border: none; border-top: 1px solid var(--b1); margin: 24px 0; }
-.empty   { padding: 60px 0; text-align: center; font-size: 14px; color: var(--mu); }
-.badge-member { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--off); border: 1px solid var(--b1); border-radius: 30px; font-size: 14px; font-weight: 600; }
-.logout-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; margin-left: auto; }
-.logout-btn:hover { color: var(--bk); }
-.rr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.text-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
-.text-btn:hover { color: var(--bk); }
+.empty { padding: 40px 0; text-align: center; font-size: 14px; color: var(--mu); }
 
 .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(14px); opacity: 0; background: var(--bk); color: var(--w); font-size: 13px; font-weight: 600; letter-spacing: .4px; padding: 12px 22px; border-radius: 9px; transition: all .22s ease; z-index: 99; pointer-events: none; white-space: nowrap; }
 .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 .sp { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: rgba(255,255,255,.85); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 7px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .4; transform: scale(.8); }
+}
 
 @media (max-width: 600px) {
   #app { padding: 0 20px 80px; }
   .hd { padding: 44px 0 28px; margin-bottom: 28px; }
   .hd-title { font-size: 32px; }
   .bg, .stats3 { grid-template-columns: 1fr 1fr; }
+  .stat-divider { display: none; }
 }
 </style>
 </head>
@@ -205,60 +224,97 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
   <!-- ═══ APP ═══ -->
   <div id="s-app" class="screen">
     <div class="hd">
-      <div class="hd-eye">Team Operations</div>
-      <div class="hd-title">Break Tracker</div>
-      <div class="hd-sub" id="app-clock">--:--:--</div>
+      <div class="hd-row">
+        <div>
+          <div class="hd-eye">Team Operations</div>
+          <div class="hd-title">Break Tracker</div>
+        </div>
+        <div class="hd-sub" id="app-clock">--:--:--</div>
+      </div>
     </div>
 
-    <div style="display:flex;align-items:center;margin-bottom:32px;gap:14px;">
+    <div class="badge-row">
       <div class="badge-member">
-        <span id="badge-init" style="width:26px;height:26px;border-radius:50%;background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.4px"></span>
+        <span id="badge-init" class="badge-init"></span>
         <span id="badge-name"></span>
       </div>
-      <button class="logout-btn" onclick="logout()">Sign Out</button>
+      <button class="icon-btn" id="notif-btn" onclick="enableNotifs()" style="display:none">Enable Alerts</button>
+      <button class="icon-btn" style="margin-left:auto" onclick="logout()">Sign Out</button>
     </div>
 
-    <nav class="nav" id="main-nav">
-      <button class="nv on" onclick="goTab('log')">Log Break</button>
-      <button class="nv" onclick="goTab('live')">Live Status</button>
-      <button class="nv" id="nav-summary" style="display:none" onclick="goTab('summary')">Summary</button>
-    </nav>
+    <!-- Admin-only summary toggle -->
+    <div id="admin-toggle" style="display:none">
+      <div class="summary-toggle">
+        <button class="st-btn on" onclick="setView('main')"    id="view-main">Log Break</button>
+        <button class="st-btn"    onclick="setView('summary')" id="view-summary">Summary</button>
+      </div>
+    </div>
 
-    <div id="tab-log" class="screen on">
-      <div id="ui-start">
-        <div class="lbl">Type of Break</div>
-        <div class="bg">
-          <button class="bc" data-type="Coffee"        onclick="selBreak('Coffee')">Coffee<div class="bc-sub">Coffee break</div></button>
-          <button class="bc" data-type="Restroom (WC)" onclick="selBreak('Restroom (WC)')">Restroom (WC)<div class="bc-sub">Restroom break</div></button>
-          <button class="bc" data-type="Prayer"        onclick="selBreak('Prayer')">Prayer<div class="bc-sub">Prayer break</div></button>
-          <button class="bc" data-type="Other"         onclick="selBreak('Other')">Other<div class="bc-sub">Any other reason</div></button>
+    <!-- ═══════ MAIN VIEW ═══════ -->
+    <div id="view-main-area">
+      <div class="layout">
+        <!-- LEFT: main content -->
+        <div class="main">
+          <!-- Personal stats (today) -->
+          <div class="stat-strip" id="stat-strip" style="display:none">
+            <div class="stat-cell">
+              <div class="stat-cell-l">Today</div>
+              <div class="stat-cell-v" id="stat-count">0 breaks</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-cell">
+              <div class="stat-cell-l">Total time</div>
+              <div class="stat-cell-v" id="stat-total">0 min</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-cell">
+              <div class="stat-cell-l">Last break</div>
+              <div class="stat-cell-v" id="stat-last">—</div>
+            </div>
+          </div>
+
+          <div id="ui-start">
+            <div class="lbl">Type of Break</div>
+            <div class="bg">
+              <button class="bc" data-type="Coffee"        onclick="selBreak('Coffee')">Coffee<div class="bc-sub">Coffee break</div></button>
+              <button class="bc" data-type="Phone Call" onclick="selBreak('Phone Call')">Phone Call<div class="bc-sub">Phone Call</div></button>
+              <button class="bc" data-type="Prayer"        onclick="selBreak('Prayer')">Prayer<div class="bc-sub">Prayer break</div></button>
+              <button class="bc" data-type="Other"         onclick="selBreak('Other')">Other<div class="bc-sub">Any other reason</div></button>
+            </div>
+            <button class="btn btn-k" id="btn-start" onclick="doStart()" disabled>Select a break type</button>
+          </div>
+
+          <div id="ui-end" style="display:none">
+            <div class="ap" id="active-panel">
+              <div class="ap-r"><span class="ap-l">Break Type</span><span class="ap-v" id="ae-type">—</span></div>
+              <div class="ap-r"><span class="ap-l">Started At</span><span class="ap-v" id="ae-start">—</span></div>
+              <div class="ap-r" style="justify-content:center;padding:28px 22px;"><span class="ap-t" id="ae-timer">00:00</span></div>
+              <div class="ap-warn" id="ap-warn" style="display:none">
+                <div class="ap-warn-dot"></div>
+                <div class="ap-warn-text">This break has exceeded the standard 15-minute limit</div>
+              </div>
+            </div>
+            <button class="btn btn-o" onclick="doEnd()">Back to Post</button>
+          </div>
         </div>
-        <button class="btn btn-k" id="btn-start" onclick="doStart()" disabled>Select a break type</button>
-      </div>
-      <div id="ui-end" style="display:none">
-        <div class="ap">
-          <div class="ap-r"><span class="ap-l">Break Type</span><span class="ap-v" id="ae-type">—</span></div>
-          <div class="ap-r"><span class="ap-l">Started At</span><span class="ap-v" id="ae-start">—</span></div>
-          <div class="ap-r" style="justify-content:center;padding:28px 22px;"><span class="ap-t" id="ae-timer">00:00</span></div>
-        </div>
-        <button class="btn btn-o" onclick="doEnd()">Back to Post</button>
+
+        <!-- RIGHT: persistent sidebar -->
+        <aside class="side">
+          <div class="side-card">
+            <div class="side-head">
+              <div class="side-title">Team</div>
+              <div class="side-pulse" title="Live"></div>
+            </div>
+            <div id="side-content"><div class="side-empty">Loading...</div></div>
+            <div class="side-refresh" id="side-refresh">Auto-refresh in 20s</div>
+          </div>
+        </aside>
       </div>
     </div>
 
-    <div id="tab-live" class="screen">
-      <div class="rr">
-        <div class="lbl" style="margin-bottom:0">Currently on Break</div>
-        <button class="text-btn" onclick="loadLive()">Refresh</button>
-      </div>
-      <div id="live-content"><div class="empty">Loading...</div></div>
-    </div>
-
-    <div id="tab-summary" class="screen">
-      <div class="rr">
-        <div style="font-family:var(--serif);font-size:28px;font-weight:400;">Summary</div>
-        <button class="text-btn" onclick="loadSummary(curPeriod)">Refresh</button>
-      </div>
-      <div class="period-row" style="margin-top:20px;">
+    <!-- ═══════ SUMMARY VIEW (admin) ═══════ -->
+    <div id="view-summary-area" style="display:none">
+      <div class="period-row">
         <button class="pb on" onclick="loadSummary('today')"  id="pb-today">Today</button>
         <button class="pb"    onclick="loadSummary('week')"   id="pb-week">Week</button>
         <button class="pb"    onclick="loadSummary('month')"  id="pb-month">Month</button>
@@ -267,25 +323,26 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
     </div>
 
   </div>
-
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const API = window.location.hostname === 'localhost'
-  ? 'http://localhost:8888/api'
-  : '/api';
-
+const API = window.location.hostname === 'localhost' ? 'http://localhost:8888/api' : '/api';
 const MEMBERS = ['Oumaima','Charif','Khalid','Imane'];
 const ADMIN   = 'Akram';
+const POLL_MS = 20000;     // 20 sec auto-refresh
+const WARN_MIN = 15;       // overdue threshold
 
 let session     = JSON.parse(localStorage.getItem('bt_session') || 'null');
 let loginMember = null;
 let loginPin    = '';
 let selBrk      = null;
 let timerInt    = null;
+let pollInt     = null;
+let pollCountdown = POLL_MS / 1000;
 let curPeriod   = 'today';
-let activeCache = {};
+let activeList  = [];      // last fetched team active breaks
+let notified    = new Set();  // notified break keys
 
 function tickClock() {
   const t = new Date().toLocaleTimeString('en-GB', { hour12: false });
@@ -312,10 +369,10 @@ function init() {
 }
 
 function buildLoginGrid() {
-  const allMembers = [...MEMBERS, ADMIN];
+  const all = [...MEMBERS, ADMIN];
   const g = document.getElementById('login-members');
   g.innerHTML = '';
-  allMembers.forEach(name => {
+  all.forEach(name => {
     const b = document.createElement('button');
     b.className = 'mc'; b.id = 'lm-' + name;
     b.onclick = () => pickLoginMember(name);
@@ -333,7 +390,6 @@ function pickLoginMember(name) {
   document.getElementById('pin-err').textContent = '';
   document.getElementById('pin-input').value = '';
   document.getElementById('pin-wrap').style.display = 'block';
-  // Auto-focus the input for keyboard typing
   setTimeout(() => document.getElementById('pin-input').focus(), 100);
 }
 
@@ -343,11 +399,9 @@ function backToNames() {
   document.getElementById('pin-wrap').style.display = 'none';
 }
 
-// ── Bind input events (manual typing) ──
 function bindPinInput() {
   const input = document.getElementById('pin-input');
   input.addEventListener('input', e => {
-    // Only allow digits
     const cleaned = e.target.value.replace(/\D/g, '').slice(0, 4);
     e.target.value = cleaned;
     loginPin = cleaned;
@@ -359,29 +413,17 @@ function bindPinInput() {
   });
 }
 
-// ── Keypad handlers (also sync to input) ──
 function pk(k) {
   if (loginPin.length >= 4) return;
   loginPin += k;
   document.getElementById('pin-input').value = loginPin;
   if (loginPin.length === 4) doLogin();
 }
-function pd() {
-  loginPin = loginPin.slice(0,-1);
-  document.getElementById('pin-input').value = loginPin;
-  document.getElementById('pin-err').textContent = '';
-}
-function pc() {
-  loginPin = '';
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-err').textContent = '';
-}
+function pd() { loginPin = loginPin.slice(0,-1); document.getElementById('pin-input').value = loginPin; document.getElementById('pin-err').textContent = ''; }
+function pc() { loginPin = ''; document.getElementById('pin-input').value = ''; document.getElementById('pin-err').textContent = ''; }
 
 async function doLogin() {
-  const res = await api('/login', {
-    method: 'POST',
-    body: JSON.stringify({ member: loginMember, pin: loginPin })
-  });
+  const res = await api('/login', { method: 'POST', body: JSON.stringify({ member: loginMember, pin: loginPin }) });
   if (res.error) {
     document.getElementById('pin-err').textContent = 'Incorrect PIN — try again.';
     const input = document.getElementById('pin-input');
@@ -398,8 +440,9 @@ async function doLogin() {
 function logout() {
   session = null;
   localStorage.removeItem('bt_session');
-  activeCache = {}; selBrk = null;
-  clearInterval(timerInt);
+  selBrk = null; activeList = []; notified = new Set();
+  clearInterval(timerInt); clearInterval(pollInt);
+  document.title = 'Break Tracker';
   show('s-login'); hide('s-app');
   backToNames();
 }
@@ -408,28 +451,45 @@ async function loadApp() {
   show('s-app'); hide('s-login');
   document.getElementById('badge-init').textContent = initials(session.member);
   document.getElementById('badge-name').textContent = session.member;
-  if (session.isAdmin) document.getElementById('nav-summary').style.display = 'block';
+  if (session.isAdmin) document.getElementById('admin-toggle').style.display = 'block';
 
-  const me = await api('/me');
-  if (me.onBreak && me.breakInfo) {
-    activeCache[session.member] = me.breakInfo;
-    showEndUI(me.breakInfo);
-  } else {
-    showStartUI();
+  // Notification permission button
+  if ('Notification' in window && Notification.permission === 'default') {
+    document.getElementById('notif-btn').style.display = 'inline-block';
   }
-  goTab('log');
+
+  // Initial loads
+  const me = await api('/me');
+  if (me.onBreak && me.breakInfo) showEndUI(me.breakInfo);
+  else showStartUI();
+
+  loadPersonalStats();
+  loadSideStatus();
+  startPolling();
 }
 
-const TAB_IDS = ['log','live','summary'];
-function goTab(name) {
-  document.querySelectorAll('.nv').forEach((b,i) => b.classList.toggle('on', TAB_IDS[i] === name));
-  TAB_IDS.forEach(t => { const el = document.getElementById('tab-'+t); if(el) el.classList.remove('on'); });
-  const tab = document.getElementById('tab-'+name);
-  if (tab) tab.classList.add('on');
-  if (name === 'live')    loadLive();
+// ── View switching (admin) ──
+function setView(name) {
+  document.querySelectorAll('.st-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('view-' + name).classList.add('on');
+  document.getElementById('view-main-area').style.display    = name === 'main'    ? 'block' : 'none';
+  document.getElementById('view-summary-area').style.display = name === 'summary' ? 'block' : 'none';
   if (name === 'summary') loadSummary(curPeriod);
 }
 
+// ── Personal stats (today) ──
+async function loadPersonalStats() {
+  const res = await api('/me/stats?period=today');
+  if (res.error) return;
+  document.getElementById('stat-strip').style.display = 'flex';
+  document.getElementById('stat-count').textContent = `${res.count} break${res.count === 1 ? '' : 's'}`;
+  document.getElementById('stat-total').textContent = `${res.totalMins} min`;
+  document.getElementById('stat-last').textContent = res.lastBreak
+    ? `${res.lastBreak.type} · ${res.lastBreak.time}`
+    : 'None yet';
+}
+
+// ── Break flow ──
 function selBreak(t) {
   selBrk = t;
   document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
@@ -446,6 +506,7 @@ function showStartUI() {
   document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
   const btn = document.getElementById('btn-start');
   btn.disabled = true; btn.textContent = 'Select a break type';
+  clearInterval(timerInt);
 }
 
 function showEndUI(info) {
@@ -458,81 +519,150 @@ function showEndUI(info) {
 
 function startTimer(ts) {
   clearInterval(timerInt);
-  const el = document.getElementById('ae-timer');
+  const el      = document.getElementById('ae-timer');
+  const panel   = document.getElementById('active-panel');
+  const warning = document.getElementById('ap-warn');
   timerInt = setInterval(() => {
     const s = Math.floor((Date.now() - ts) / 1000);
     el.textContent = pad(Math.floor(s/60)) + ':' + pad(s%60);
+    // Self-nudge for long break
+    if (s >= WARN_MIN * 60) {
+      panel.classList.add('long');
+      warning.style.display = 'flex';
+    } else {
+      panel.classList.remove('long');
+      warning.style.display = 'none';
+    }
   }, 1000);
 }
 
 async function doStart() {
   if (!selBrk) return;
   const btn = document.getElementById('btn-start');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="sp"></span>Logging...';
-
+  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Logging...';
   const now = new Date();
   const info = { breakType: selBrk, startTime: toTimeStr(now), startTs: now.getTime() };
-  activeCache[session.member] = info;
   showEndUI(info);
   toast('Break started');
 
   const res = await api('/break/start', { method: 'POST', body: JSON.stringify({ breakType: selBrk }) });
-  if (res.error) {
-    delete activeCache[session.member];
-    showStartUI(); toast(res.error);
-  } else {
-    activeCache[session.member].startTs = res.timestamp;
-  }
+  if (res.error) { showStartUI(); toast(res.error); }
+  loadSideStatus();
 }
 
 async function doEnd() {
   const btn = document.querySelector('.btn-o');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="sp"></span>Saving...';
-
-  const info = activeCache[session.member];
-  delete activeCache[session.member];
+  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Saving...';
   showStartUI();
   toast('Saved — returning...');
-
   const res = await api('/break/end', { method: 'POST' });
-  if (res.error) {
-    activeCache[session.member] = info;
-    showEndUI(info); toast(res.error);
-  } else {
-    toast('Saved — ' + res.duration + ' min');
-  }
+  if (res.error) toast(res.error);
+  else toast('Saved — ' + res.duration + ' min');
+  loadPersonalStats();
+  loadSideStatus();
 }
 
-async function loadLive() {
-  document.getElementById('live-content').innerHTML = '<div class="empty">Loading...</div>';
+// ── Side / team status (always visible) ──
+async function loadSideStatus() {
   const res = await api('/breaks/active');
-  if (res.error) { document.getElementById('live-content').innerHTML = '<div class="empty">Failed to load.</div>'; return; }
+  if (res.error) {
+    document.getElementById('side-content').innerHTML = '<div class="side-empty">Failed to load.</div>';
+    return;
+  }
+  activeList = res.active || [];
+  renderSide();
+  checkNotifications();
+  updateTabTitle();
+}
 
-  const allMembers = [...MEMBERS, ...(session.isAdmin ? [ADMIN] : [])];
-  const onBreak    = res.active || [];
-  const onNames    = onBreak.map(a => a.member);
+function renderSide() {
+  const allMembers = [...MEMBERS, ADMIN];
+  const onNames    = activeList.map(a => a.member);
   const atPost     = allMembers.filter(m => !onNames.includes(m));
+  const el = document.getElementById('side-content');
 
   let html = '';
-  if (onBreak.length) {
-    onBreak.forEach(a => {
-      html += `<div class="li-item">
-        <div><div class="li-n">${a.member}</div><div class="li-m">${a.breakType} &middot; since ${a.startTime}</div></div>
-        <div class="li-pill ${a.elapsedMins > 15 ? 'ov' : ''}">${a.elapsedMins}&thinsp;min</div>
+  if (activeList.length) {
+    html += `<div class="side-section">On Break (${activeList.length})</div>`;
+    activeList.forEach(a => {
+      const elapsed = Math.floor((Date.now() - a.startTs) / 60000);
+      const over    = elapsed >= WARN_MIN;
+      html += `<div class="si-item">
+        <div class="si-info">
+          <div class="si-name-row">
+            ${over ? '<span class="si-overdue-dot"></span>' : ''}
+            <span class="si-n">${a.member}</span>
+          </div>
+          <div class="si-m">${a.breakType} · ${a.startTime}</div>
+        </div>
+        <div class="si-pill ${over ? 'ov' : ''}">${elapsed}&thinsp;m</div>
       </div>`;
     });
   }
   if (atPost.length) {
-    if (onBreak.length) html += `<div style="height:20px"></div><div class="lbl">At Post</div>`;
+    html += `<div class="side-section">At Post (${atPost.length})</div>`;
     atPost.forEach(m => {
-      html += `<div class="at-r"><span class="at-n">${m}</span><span class="at-t">At Post</span></div>`;
+      html += `<div class="si-at-r"><span class="si-at-n">${m}</span><span class="si-at-t">At Post</span></div>`;
     });
   }
-  document.getElementById('live-content').innerHTML = html || '<div class="empty">Everyone is at their post</div>';
+  el.innerHTML = html || '<div class="side-empty">Everyone is at their post</div>';
 }
 
+// ── Polling: refresh side status every 20s ──
+function startPolling() {
+  clearInterval(pollInt);
+  pollCountdown = POLL_MS / 1000;
+  pollInt = setInterval(() => {
+    pollCountdown--;
+    document.getElementById('side-refresh').textContent =
+      pollCountdown > 0 ? `Auto-refresh in ${pollCountdown}s` : 'Refreshing...';
+    if (pollCountdown <= 0) {
+      pollCountdown = POLL_MS / 1000;
+      loadSideStatus();
+    } else {
+      // Re-render to update elapsed minutes (without API call)
+      renderSide();
+      updateTabTitle();
+      checkNotifications();
+    }
+  }, 1000);
+}
+
+// ── Notifications ──
+function enableNotifs() {
+  if (!('Notification' in window)) { toast('Notifications not supported'); return; }
+  Notification.requestPermission().then(perm => {
+    if (perm === 'granted') {
+      toast('Alerts enabled');
+      document.getElementById('notif-btn').style.display = 'none';
+    } else {
+      toast('Alerts denied');
+    }
+  });
+}
+
+function checkNotifications() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  activeList.forEach(a => {
+    const elapsed = Math.floor((Date.now() - a.startTs) / 60000);
+    const key = `${a.member}:${a.startTs}`;
+    if (elapsed >= WARN_MIN && !notified.has(key)) {
+      notified.add(key);
+      new Notification('Break exceeds 15 min', {
+        body: `${a.member} — ${a.breakType} · ${elapsed} min`,
+        silent: false,
+        tag: key
+      });
+    }
+  });
+}
+
+function updateTabTitle() {
+  const over = activeList.filter(a => Math.floor((Date.now() - a.startTs) / 60000) >= WARN_MIN);
+  document.title = over.length ? `(${over.length}) Break Tracker` : 'Break Tracker';
+}
+
+// ── Summary (admin only) ──
 async function loadSummary(period) {
   curPeriod = period;
   document.querySelectorAll('.pb').forEach(b => b.classList.remove('on'));
@@ -580,15 +710,14 @@ async function loadSummary(period) {
       </div>`;
     });
   }
-
   document.getElementById('summary-content').innerHTML = html;
 }
 
 function initials(name) { return name.slice(0,2).toUpperCase(); }
 function pad(n) { return String(n).padStart(2,'0'); }
 function toTimeStr(d) { return d.toLocaleTimeString('en-GB', { hour12: false }); }
-function show(id) { const el = document.getElementById(id); if(el) el.classList.add('on'); }
-function hide(id) { const el = document.getElementById(id); if(el) el.classList.remove('on'); }
+function show(id) { document.getElementById(id)?.classList.add('on'); }
+function hide(id) { document.getElementById(id)?.classList.remove('on'); }
 
 function toast(msg) {
   const el = document.getElementById('toast');
