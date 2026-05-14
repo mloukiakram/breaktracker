@@ -22,29 +22,25 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 
 .hd { padding: 56px 0 32px; border-bottom: 1px solid var(--b1); margin-bottom: 36px; }
 .hd-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
-.hd-eye  { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--mu); margin-bottom: 12px; }
+.hd-eye { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--mu); margin-bottom: 12px; }
 .hd-title { font-family: var(--serif); font-size: 42px; font-weight: 400; line-height: 1.05; }
-.hd-sub  { margin-top: 12px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
-.hd-actions { display: flex; align-items: center; gap: 14px; }
+.hd-sub { margin-top: 12px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
 
 .lbl { font-size: 12px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--mu); margin-bottom: 14px; }
 
-/* ── Two-column layout ── */
 .layout { display: grid; grid-template-columns: 1fr; gap: 36px; }
 @media (min-width: 920px) {
-  .layout { grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
-  .side    { position: sticky; top: 28px; }
+  .layout { grid-template-columns: 1fr 340px; gap: 40px; align-items: start; }
+  .side { position: sticky; top: 28px; }
 }
 
-/* ── Member badge + actions ── */
 .badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
 .badge-member { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--off); border: 1px solid var(--b1); border-radius: 30px; font-size: 14px; font-weight: 600; }
 .badge-init { width: 26px; height: 26px; border-radius: 50%; background: var(--b1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; letter-spacing: .4px; }
+.admin-chip { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 8px; background: var(--bk); color: var(--w); border-radius: 4px; }
 .icon-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
 .icon-btn:hover { color: var(--bk); }
-.icon-btn.danger:hover { color: var(--bk); }
 
-/* ── Login member grid ── */
 .mg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 32px; }
 @media (max-width: 600px) { .mg { grid-template-columns: 1fr 1fr; } }
 .mc { padding: 18px 16px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; display: flex; align-items: center; gap: 14px; user-select: none; }
@@ -56,7 +52,6 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .mc-s { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 3px; }
 .mc.sel .mc-s { color: rgba(255,255,255,.4); }
 
-/* ── PIN ── */
 .pin-wrap { padding: 32px 0 0; max-width: 340px; margin: 0 auto; }
 .pin-input { width: 100%; padding: 18px 22px; border: 1.5px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 28px; font-weight: 500; letter-spacing: 16px; text-align: center; color: var(--bk); transition: border-color .13s; margin-bottom: 8px; -webkit-text-security: disc; }
 .pin-input:focus { outline: none; border-color: var(--bk); }
@@ -70,22 +65,19 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .pin-back { display: block; text-align: center; margin: 28px auto 0; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .12s; font-family: var(--sans); }
 .pin-back:hover { color: var(--bk); }
 
-/* ── Personal stat strip ── */
 .stat-strip { display: flex; align-items: center; gap: 24px; padding: 16px 20px; background: var(--off); border: 1px solid var(--b1); border-radius: var(--rad); margin-bottom: 28px; flex-wrap: wrap; }
 .stat-cell { display: flex; flex-direction: column; gap: 3px; }
 .stat-cell-l { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--mu); }
 .stat-cell-v { font-size: 16px; font-weight: 700; color: var(--bk); font-variant-numeric: tabular-nums; }
 .stat-divider { width: 1px; height: 28px; background: var(--b1); }
 
-/* ── Break grid ── */
 .bg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-.bc { padding: 22px 22px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--dk); text-align: left; }
+.bc { padding: 22px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--dk); text-align: left; }
 .bc:hover { border-color: var(--b2); background: var(--off); }
 .bc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
 .bc-sub { font-size: 13px; font-weight: 400; color: var(--mu); margin-top: 5px; }
 .bc.sel .bc-sub { color: rgba(255,255,255,.4); }
 
-/* ── Buttons ── */
 .btn { width: 100%; padding: 18px 22px; border-radius: var(--rad); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; transition: all .13s; }
 .btn-k { background: var(--bk); color: var(--w); }
 .btn-k:hover:not(:disabled) { background: var(--dk); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.13); }
@@ -95,7 +87,6 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .btn-g { background: var(--w); color: var(--bk); border: 1px solid var(--b2); }
 .btn-g:hover { background: var(--off); }
 
-/* ── Active panel ── */
 .ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 24px; transition: border-color .3s; }
 .ap.long { border-color: var(--dk); }
 .ap-r { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--b1); }
@@ -108,7 +99,6 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .ap-warn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
 .ap-warn-text { font-size: 12px; font-weight: 600; letter-spacing: .3px; color: var(--dk); }
 
-/* ── Sidebar ── */
 .side-card { border: 1px solid var(--b1); border-radius: var(--rad); padding: 22px 20px; background: var(--w); }
 .side-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .side-title { font-family: var(--serif); font-size: 22px; font-weight: 400; }
@@ -123,15 +113,18 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .si-overdue-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
 .si-n { font-size: 14px; font-weight: 600; }
 .si-m { font-size: 11px; color: var(--mu); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.si-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .si-pill { font-size: 11px; font-weight: 700; padding: 4px 9px; border: 1px solid var(--b2); border-radius: 5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .si-pill.ov { border-color: var(--bk); color: var(--bk); }
-.si-at-r { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; }
-.si-at-n { font-size: 13px; font-weight: 500; color: var(--mu); }
+.si-action { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; padding: 0; transition: color .12s; white-space: nowrap; }
+.si-action:hover { color: var(--bk); }
+.si-at-r { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; gap: 8px; border-bottom: 1px solid var(--b1); }
+.si-at-r:last-child { border-bottom: none; }
+.si-at-n { font-size: 13px; font-weight: 500; color: var(--mu); flex: 1; }
 .si-at-t { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); padding: 3px 8px; border: 1px solid var(--b1); border-radius: 4px; }
 .side-empty { text-align: center; padding: 16px 0; font-size: 12px; color: var(--mu); }
 .side-refresh { font-size: 10px; color: var(--mu); margin-top: 14px; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: .3px; }
 
-/* ── Summary view ── */
 .summary-toggle { display: inline-flex; padding: 4px; border: 1px solid var(--b1); border-radius: 10px; background: var(--off); margin-bottom: 28px; }
 .st-btn { padding: 9px 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; border: none; background: transparent; color: var(--mu); cursor: pointer; border-radius: 7px; transition: all .12s; }
 .st-btn.on { background: var(--w); color: var(--bk); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
@@ -163,6 +156,22 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 .divider { border: none; border-top: 1px solid var(--b1); margin: 24px 0; }
 .empty { padding: 40px 0; text-align: center; font-size: 14px; color: var(--mu); }
 
+/* ── Modal ── */
+.mo-overlay { position: fixed; inset: 0; background: rgba(12,12,12,.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.mo-overlay.on { display: flex; animation: fadeIn .2s ease; }
+.mo { background: var(--w); border-radius: 14px; padding: 28px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: slideUp .25s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.mo-eye { font-size: 10px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mu); margin-bottom: 6px; }
+.mo-title { font-family: var(--serif); font-size: 22px; font-weight: 400; margin-bottom: 6px; }
+.mo-sub { font-size: 13px; color: var(--mi); margin-bottom: 20px; line-height: 1.45; }
+.mo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.mo .btn { padding: 14px 18px; font-size: 12px; }
+.mo-bg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+.mo-bc { padding: 14px; border: 1px solid var(--b1); border-radius: 10px; background: var(--w); cursor: pointer; transition: all .12s; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--dk); text-align: left; }
+.mo-bc:hover { border-color: var(--b2); background: var(--off); }
+.mo-bc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
+
 .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(14px); opacity: 0; background: var(--bk); color: var(--w); font-size: 13px; font-weight: 600; letter-spacing: .4px; padding: 12px 22px; border-radius: 9px; transition: all .22s ease; z-index: 99; pointer-events: none; white-space: nowrap; }
 .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -177,7 +186,7 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
   #app { padding: 0 20px 80px; }
   .hd { padding: 44px 0 28px; margin-bottom: 28px; }
   .hd-title { font-size: 32px; }
-  .bg, .stats3 { grid-template-columns: 1fr 1fr; }
+  .bg, .stats3, .mo-bg { grid-template-columns: 1fr 1fr; }
   .stat-divider { display: none; }
 }
 </style>
@@ -199,8 +208,7 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       <div class="lbl" style="text-align:center;margin-bottom:18px" id="pin-greeting">Enter your PIN</div>
       <input type="password" id="pin-input" class="pin-input"
              inputmode="numeric" pattern="[0-9]*" maxlength="4"
-             autocomplete="off" autocorrect="off" spellcheck="false"
-             placeholder="••••">
+             autocomplete="off" autocorrect="off" spellcheck="false" placeholder="••••">
       <div class="pin-hint">Type your PIN or use the keypad</div>
       <div class="pin-grid">
         <button class="pk" onclick="pk('1')">1</button>
@@ -237,12 +245,12 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       <div class="badge-member">
         <span id="badge-init" class="badge-init"></span>
         <span id="badge-name"></span>
+        <span class="admin-chip" id="admin-chip" style="display:none">Admin</span>
       </div>
       <button class="icon-btn" id="notif-btn" onclick="enableNotifs()" style="display:none">Enable Alerts</button>
       <button class="icon-btn" style="margin-left:auto" onclick="logout()">Sign Out</button>
     </div>
 
-    <!-- Admin-only summary toggle -->
     <div id="admin-toggle" style="display:none">
       <div class="summary-toggle">
         <button class="st-btn on" onclick="setView('main')"    id="view-main">Log Break</button>
@@ -250,12 +258,9 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       </div>
     </div>
 
-    <!-- ═══════ MAIN VIEW ═══════ -->
     <div id="view-main-area">
       <div class="layout">
-        <!-- LEFT: main content -->
         <div class="main">
-          <!-- Personal stats (today) -->
           <div class="stat-strip" id="stat-strip" style="display:none">
             <div class="stat-cell">
               <div class="stat-cell-l">Today</div>
@@ -298,7 +303,6 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
           </div>
         </div>
 
-        <!-- RIGHT: persistent sidebar -->
         <aside class="side">
           <div class="side-card">
             <div class="side-head">
@@ -312,7 +316,6 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
       </div>
     </div>
 
-    <!-- ═══════ SUMMARY VIEW (admin) ═══════ -->
     <div id="view-summary-area" style="display:none">
       <div class="period-row">
         <button class="pb on" onclick="loadSummary('today')"  id="pb-today">Today</button>
@@ -324,14 +327,47 @@ html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -
 
   </div>
 </div>
+
+<!-- ═══ ADMIN MODAL: Start break for member ═══ -->
+<div class="mo-overlay" id="mo-start">
+  <div class="mo">
+    <div class="mo-eye">Admin Action</div>
+    <div class="mo-title">Log Break for <span id="mo-start-name">—</span></div>
+    <div class="mo-sub">Choose the break type. This will be recorded under their name.</div>
+    <div class="mo-bg">
+      <button class="mo-bc" data-mtype="Coffee"        onclick="moSelType('Coffee')">Coffee</button>
+      <button class="mo-bc" data-mtype="Restroom (WC)" onclick="moSelType('Restroom (WC)')">Restroom (WC)</button>
+      <button class="mo-bc" data-mtype="Prayer"        onclick="moSelType('Prayer')">Prayer</button>
+      <button class="mo-bc" data-mtype="Other"         onclick="moSelType('Other')">Other</button>
+    </div>
+    <div class="mo-actions">
+      <button class="btn btn-g" onclick="closeStartModal()">Cancel</button>
+      <button class="btn btn-k" id="mo-start-confirm" onclick="confirmAdminStart()" disabled>Start Break</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN MODAL: End break for member ═══ -->
+<div class="mo-overlay" id="mo-end">
+  <div class="mo">
+    <div class="mo-eye">Admin Action</div>
+    <div class="mo-title">End <span id="mo-end-name">—</span>'s Break?</div>
+    <div class="mo-sub" id="mo-end-detail">—</div>
+    <div class="mo-actions">
+      <button class="btn btn-g" onclick="closeEndModal()">Cancel</button>
+      <button class="btn btn-o" onclick="confirmAdminEnd()">End Break</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const API = window.location.hostname === 'localhost' ? 'http://localhost:8888/api' : '/api';
 const MEMBERS = ['Oumaima','Charif','Khalid','Imane'];
 const ADMIN   = 'Akram';
-const POLL_MS = 20000;     // 20 sec auto-refresh
-const WARN_MIN = 15;       // overdue threshold
+const POLL_MS  = 20000;
+const WARN_MIN = 15;
 
 let session     = JSON.parse(localStorage.getItem('bt_session') || 'null');
 let loginMember = null;
@@ -341,8 +377,12 @@ let timerInt    = null;
 let pollInt     = null;
 let pollCountdown = POLL_MS / 1000;
 let curPeriod   = 'today';
-let activeList  = [];      // last fetched team active breaks
-let notified    = new Set();  // notified break keys
+let activeList  = [];
+let notified    = new Set();
+
+// Admin modal state
+let modalTarget = null;
+let modalType   = null;
 
 function tickClock() {
   const t = new Date().toLocaleTimeString('en-GB', { hour12: false });
@@ -408,17 +448,10 @@ function bindPinInput() {
     document.getElementById('pin-err').textContent = '';
     if (loginPin.length === 4) doLogin();
   });
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && loginPin.length === 4) doLogin();
-  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && loginPin.length === 4) doLogin(); });
 }
 
-function pk(k) {
-  if (loginPin.length >= 4) return;
-  loginPin += k;
-  document.getElementById('pin-input').value = loginPin;
-  if (loginPin.length === 4) doLogin();
-}
+function pk(k) { if (loginPin.length >= 4) return; loginPin += k; document.getElementById('pin-input').value = loginPin; if (loginPin.length === 4) doLogin(); }
 function pd() { loginPin = loginPin.slice(0,-1); document.getElementById('pin-input').value = loginPin; document.getElementById('pin-err').textContent = ''; }
 function pc() { loginPin = ''; document.getElementById('pin-input').value = ''; document.getElementById('pin-err').textContent = ''; }
 
@@ -451,14 +484,13 @@ async function loadApp() {
   show('s-app'); hide('s-login');
   document.getElementById('badge-init').textContent = initials(session.member);
   document.getElementById('badge-name').textContent = session.member;
-  if (session.isAdmin) document.getElementById('admin-toggle').style.display = 'block';
-
-  // Notification permission button
+  if (session.isAdmin) {
+    document.getElementById('admin-toggle').style.display = 'block';
+    document.getElementById('admin-chip').style.display   = 'inline-block';
+  }
   if ('Notification' in window && Notification.permission === 'default') {
     document.getElementById('notif-btn').style.display = 'inline-block';
   }
-
-  // Initial loads
   const me = await api('/me');
   if (me.onBreak && me.breakInfo) showEndUI(me.breakInfo);
   else showStartUI();
@@ -468,7 +500,6 @@ async function loadApp() {
   startPolling();
 }
 
-// ── View switching (admin) ──
 function setView(name) {
   document.querySelectorAll('.st-btn').forEach(b => b.classList.remove('on'));
   document.getElementById('view-' + name).classList.add('on');
@@ -477,19 +508,15 @@ function setView(name) {
   if (name === 'summary') loadSummary(curPeriod);
 }
 
-// ── Personal stats (today) ──
 async function loadPersonalStats() {
   const res = await api('/me/stats?period=today');
   if (res.error) return;
   document.getElementById('stat-strip').style.display = 'flex';
   document.getElementById('stat-count').textContent = `${res.count} break${res.count === 1 ? '' : 's'}`;
   document.getElementById('stat-total').textContent = `${res.totalMins} min`;
-  document.getElementById('stat-last').textContent = res.lastBreak
-    ? `${res.lastBreak.type} · ${res.lastBreak.time}`
-    : 'None yet';
+  document.getElementById('stat-last').textContent = res.lastBreak ? `${res.lastBreak.type} · ${res.lastBreak.time}` : 'None yet';
 }
 
-// ── Break flow ──
 function selBreak(t) {
   selBrk = t;
   document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
@@ -519,20 +546,14 @@ function showEndUI(info) {
 
 function startTimer(ts) {
   clearInterval(timerInt);
-  const el      = document.getElementById('ae-timer');
-  const panel   = document.getElementById('active-panel');
+  const el = document.getElementById('ae-timer');
+  const panel = document.getElementById('active-panel');
   const warning = document.getElementById('ap-warn');
   timerInt = setInterval(() => {
     const s = Math.floor((Date.now() - ts) / 1000);
     el.textContent = pad(Math.floor(s/60)) + ':' + pad(s%60);
-    // Self-nudge for long break
-    if (s >= WARN_MIN * 60) {
-      panel.classList.add('long');
-      warning.style.display = 'flex';
-    } else {
-      panel.classList.remove('long');
-      warning.style.display = 'none';
-    }
+    if (s >= WARN_MIN * 60) { panel.classList.add('long'); warning.style.display = 'flex'; }
+    else { panel.classList.remove('long'); warning.style.display = 'none'; }
   }, 1000);
 }
 
@@ -541,10 +562,8 @@ async function doStart() {
   const btn = document.getElementById('btn-start');
   btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Logging...';
   const now = new Date();
-  const info = { breakType: selBrk, startTime: toTimeStr(now), startTs: now.getTime() };
-  showEndUI(info);
+  showEndUI({ breakType: selBrk, startTime: toTimeStr(now), startTs: now.getTime() });
   toast('Break started');
-
   const res = await api('/break/start', { method: 'POST', body: JSON.stringify({ breakType: selBrk }) });
   if (res.error) { showStartUI(); toast(res.error); }
   loadSideStatus();
@@ -562,7 +581,7 @@ async function doEnd() {
   loadSideStatus();
 }
 
-// ── Side / team status (always visible) ──
+// ─── SIDE / TEAM ─────────────────────────────────────────────
 async function loadSideStatus() {
   const res = await api('/breaks/active');
   if (res.error) {
@@ -587,6 +606,7 @@ function renderSide() {
     activeList.forEach(a => {
       const elapsed = Math.floor((Date.now() - a.startTs) / 60000);
       const over    = elapsed >= WARN_MIN;
+      const canManage = session.isAdmin && a.member !== session.member;
       html += `<div class="si-item">
         <div class="si-info">
           <div class="si-name-row">
@@ -595,20 +615,29 @@ function renderSide() {
           </div>
           <div class="si-m">${a.breakType} · ${a.startTime}</div>
         </div>
-        <div class="si-pill ${over ? 'ov' : ''}">${elapsed}&thinsp;m</div>
+        <div class="si-right">
+          <div class="si-pill ${over ? 'ov' : ''}">${elapsed}&thinsp;m</div>
+          ${canManage ? `<button class="si-action" onclick="openEndModal('${a.member}')">End</button>` : ''}
+        </div>
       </div>`;
     });
   }
   if (atPost.length) {
     html += `<div class="side-section">At Post (${atPost.length})</div>`;
     atPost.forEach(m => {
-      html += `<div class="si-at-r"><span class="si-at-n">${m}</span><span class="si-at-t">At Post</span></div>`;
+      const canManage = session.isAdmin && m !== session.member;
+      html += `<div class="si-at-r">
+        <span class="si-at-n">${m}</span>
+        ${canManage
+          ? `<button class="si-action" onclick="openStartModal('${m}')">Log Break</button>`
+          : `<span class="si-at-t">At Post</span>`}
+      </div>`;
     });
   }
   el.innerHTML = html || '<div class="side-empty">Everyone is at their post</div>';
 }
 
-// ── Polling: refresh side status every 20s ──
+// ─── POLLING ─────────────────────────────────────────────────
 function startPolling() {
   clearInterval(pollInt);
   pollCountdown = POLL_MS / 1000;
@@ -620,7 +649,6 @@ function startPolling() {
       pollCountdown = POLL_MS / 1000;
       loadSideStatus();
     } else {
-      // Re-render to update elapsed minutes (without API call)
       renderSide();
       updateTabTitle();
       checkNotifications();
@@ -628,16 +656,14 @@ function startPolling() {
   }, 1000);
 }
 
-// ── Notifications ──
+// ─── NOTIFICATIONS ───────────────────────────────────────────
 function enableNotifs() {
   if (!('Notification' in window)) { toast('Notifications not supported'); return; }
   Notification.requestPermission().then(perm => {
     if (perm === 'granted') {
       toast('Alerts enabled');
       document.getElementById('notif-btn').style.display = 'none';
-    } else {
-      toast('Alerts denied');
-    }
+    } else { toast('Alerts denied'); }
   });
 }
 
@@ -649,9 +675,7 @@ function checkNotifications() {
     if (elapsed >= WARN_MIN && !notified.has(key)) {
       notified.add(key);
       new Notification('Break exceeds 15 min', {
-        body: `${a.member} — ${a.breakType} · ${elapsed} min`,
-        silent: false,
-        tag: key
+        body: `${a.member} — ${a.breakType} · ${elapsed} min`, tag: key
       });
     }
   });
@@ -662,7 +686,77 @@ function updateTabTitle() {
   document.title = over.length ? `(${over.length}) Break Tracker` : 'Break Tracker';
 }
 
-// ── Summary (admin only) ──
+// ─── ADMIN MODALS ────────────────────────────────────────────
+function openStartModal(memberName) {
+  modalTarget = memberName;
+  modalType   = null;
+  document.getElementById('mo-start-name').textContent = memberName;
+  document.querySelectorAll('.mo-bc').forEach(b => b.classList.remove('sel'));
+  document.getElementById('mo-start-confirm').disabled = true;
+  document.getElementById('mo-start').classList.add('on');
+}
+
+function closeStartModal() {
+  document.getElementById('mo-start').classList.remove('on');
+  modalTarget = null; modalType = null;
+}
+
+function moSelType(t) {
+  modalType = t;
+  document.querySelectorAll('.mo-bc').forEach(b => b.classList.remove('sel'));
+  document.querySelector(`.mo-bc[data-mtype="${t}"]`)?.classList.add('sel');
+  document.getElementById('mo-start-confirm').disabled = false;
+}
+
+async function confirmAdminStart() {
+  if (!modalTarget || !modalType) return;
+  const btn = document.getElementById('mo-start-confirm');
+  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Starting...';
+  const res = await api('/break/start', {
+    method: 'POST',
+    body: JSON.stringify({ breakType: modalType, targetMember: modalTarget })
+  });
+  if (res.error) { toast(res.error); btn.disabled = false; btn.textContent = 'Start Break'; return; }
+  toast(`Break started for ${modalTarget}`);
+  closeStartModal();
+  loadSideStatus();
+}
+
+function openEndModal(memberName) {
+  modalTarget = memberName;
+  const entry = activeList.find(a => a.member === memberName);
+  if (!entry) { toast('Break not found'); return; }
+  const elapsed = Math.floor((Date.now() - entry.startTs) / 60000);
+  document.getElementById('mo-end-name').textContent = memberName;
+  document.getElementById('mo-end-detail').textContent =
+    `${entry.breakType} · started at ${entry.startTime} · ${elapsed} min elapsed`;
+  document.getElementById('mo-end').classList.add('on');
+}
+
+function closeEndModal() {
+  document.getElementById('mo-end').classList.remove('on');
+  modalTarget = null;
+}
+
+async function confirmAdminEnd() {
+  if (!modalTarget) return;
+  const btn = document.querySelector('#mo-end .btn-o');
+  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Ending...';
+  const res = await api('/break/end', {
+    method: 'POST',
+    body: JSON.stringify({ targetMember: modalTarget })
+  });
+  if (res.error) { toast(res.error); btn.disabled = false; btn.textContent = 'End Break'; return; }
+  toast(`Ended ${modalTarget}'s break — ${res.duration} min`);
+  closeEndModal();
+  loadSideStatus();
+}
+
+// Close modals on overlay click
+document.getElementById('mo-start').addEventListener('click', e => { if (e.target.id === 'mo-start') closeStartModal(); });
+document.getElementById('mo-end').addEventListener('click',   e => { if (e.target.id === 'mo-end')   closeEndModal();   });
+
+// ─── SUMMARY ─────────────────────────────────────────────────
 async function loadSummary(period) {
   curPeriod = period;
   document.querySelectorAll('.pb').forEach(b => b.classList.remove('on'));
