@@ -1,825 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Break Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --w:#ffffff; --off:#f6f6f6; --b1:#e4e4e4; --b2:#cccccc;
-  --mu:#999; --mi:#666; --dk:#2a2a2a; --bk:#0c0c0c;
-  --rad:12px;
-  --serif:'DM Serif Display', Georgia, serif;
-  --sans:'Figtree', -apple-system, sans-serif;
-}
-html, body { font-family: var(--sans); background: var(--w); color: var(--bk); -webkit-font-smoothing: antialiased; min-height: 100vh; font-size: 16px; }
-
-#app { max-width: 1180px; margin: 0 auto; padding: 0 48px 100px; }
-.screen { display: none; }
-.screen.on { display: block; }
-
-.hd { padding: 56px 0 32px; border-bottom: 1px solid var(--b1); margin-bottom: 36px; }
-.hd-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
-.hd-eye { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--mu); margin-bottom: 12px; }
-.hd-title { font-family: var(--serif); font-size: 42px; font-weight: 400; line-height: 1.05; }
-.hd-sub { margin-top: 12px; font-size: 14px; color: var(--mu); font-variant-numeric: tabular-nums; }
-
-.lbl { font-size: 12px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--mu); margin-bottom: 14px; }
-
-.layout { display: grid; grid-template-columns: 1fr; gap: 36px; }
-@media (min-width: 920px) {
-  .layout { grid-template-columns: 1fr 340px; gap: 40px; align-items: start; }
-  .side { position: sticky; top: 28px; }
-}
-
-.badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
-.badge-member { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--off); border: 1px solid var(--b1); border-radius: 30px; font-size: 14px; font-weight: 600; }
-.badge-init { width: 26px; height: 26px; border-radius: 50%; background: var(--b1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; letter-spacing: .4px; }
-.admin-chip { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 8px; background: var(--bk); color: var(--w); border-radius: 4px; }
-.icon-btn { background: none; border: none; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); cursor: pointer; padding: 0; transition: color .12s; }
-.icon-btn:hover { color: var(--bk); }
-
-.mg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 32px; }
-@media (max-width: 600px) { .mg { grid-template-columns: 1fr 1fr; } }
-.mc { padding: 18px 16px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; display: flex; align-items: center; gap: 14px; user-select: none; }
-.mc:hover { border-color: var(--b2); background: var(--off); }
-.mc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.mc-init { width: 38px; height: 38px; border-radius: 50%; background: var(--off); border: 1px solid var(--b1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--dk); flex-shrink: 0; transition: all .13s; }
-.mc.sel .mc-init { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.18); color: var(--w); }
-.mc-n { font-size: 16px; font-weight: 600; }
-.mc-s { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); margin-top: 3px; }
-.mc.sel .mc-s { color: rgba(255,255,255,.4); }
-
-.pin-wrap { padding: 32px 0 0; max-width: 340px; margin: 0 auto; }
-.pin-input { width: 100%; padding: 18px 22px; border: 1.5px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 28px; font-weight: 500; letter-spacing: 16px; text-align: center; color: var(--bk); transition: border-color .13s; margin-bottom: 8px; -webkit-text-security: disc; }
-.pin-input:focus { outline: none; border-color: var(--bk); }
-.pin-hint { text-align: center; font-size: 11px; color: var(--mu); margin-bottom: 28px; letter-spacing: .3px; }
-.pin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
-.pk { aspect-ratio: 1; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); font-family: var(--sans); font-size: 22px; font-weight: 500; color: var(--bk); cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; }
-.pk:hover { background: var(--off); border-color: var(--b2); }
-.pk:active { background: var(--b1); }
-.pk.del { font-size: 16px; color: var(--mu); }
-.pin-err { text-align: center; font-size: 13px; font-weight: 600; color: var(--dk); margin-top: 20px; min-height: 20px; }
-.pin-back { display: block; text-align: center; margin: 28px auto 0; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .12s; font-family: var(--sans); }
-.pin-back:hover { color: var(--bk); }
-
-.stat-strip { display: flex; align-items: center; gap: 24px; padding: 16px 20px; background: var(--off); border: 1px solid var(--b1); border-radius: var(--rad); margin-bottom: 28px; flex-wrap: wrap; }
-.stat-cell { display: flex; flex-direction: column; gap: 3px; }
-.stat-cell-l { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--mu); }
-.stat-cell-v { font-size: 16px; font-weight: 700; color: var(--bk); font-variant-numeric: tabular-nums; }
-.stat-divider { width: 1px; height: 28px; background: var(--b1); }
-
-.bg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-.bc { padding: 22px; border: 1px solid var(--b1); border-radius: var(--rad); background: var(--w); cursor: pointer; transition: all .13s; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--dk); text-align: left; }
-.bc:hover { border-color: var(--b2); background: var(--off); }
-.bc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.bc-sub { font-size: 13px; font-weight: 400; color: var(--mu); margin-top: 5px; }
-.bc.sel .bc-sub { color: rgba(255,255,255,.4); }
-
-.btn { width: 100%; padding: 18px 22px; border-radius: var(--rad); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; transition: all .13s; }
-.btn-k { background: var(--bk); color: var(--w); }
-.btn-k:hover:not(:disabled) { background: var(--dk); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.13); }
-.btn-k:disabled { background: var(--b1); color: var(--mu); cursor: not-allowed; }
-.btn-o { background: var(--w); color: var(--bk); border: 1.5px solid var(--bk); }
-.btn-o:hover { background: var(--bk); color: var(--w); }
-.btn-g { background: var(--w); color: var(--bk); border: 1px solid var(--b2); }
-.btn-g:hover { background: var(--off); }
-
-.ap { border: 1px solid var(--b1); border-radius: var(--rad); overflow: hidden; margin-bottom: 24px; transition: border-color .3s; }
-.ap.long { border-color: var(--dk); }
-.ap-r { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--b1); }
-.ap-r:last-child { border-bottom: none; }
-.ap-l { font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--mu); }
-.ap-v { font-size: 16px; font-weight: 600; }
-.ap-t { font-size: 44px; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; transition: color .3s; }
-.ap.long .ap-t { color: var(--bk); font-weight: 500; }
-.ap-warn { padding: 14px 22px; background: var(--off); border-top: 1px solid var(--b1); display: flex; align-items: center; gap: 10px; }
-.ap-warn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
-.ap-warn-text { font-size: 12px; font-weight: 600; letter-spacing: .3px; color: var(--dk); }
-
-.side-card { border: 1px solid var(--b1); border-radius: var(--rad); padding: 22px 20px; background: var(--w); }
-.side-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-.side-title { font-family: var(--serif); font-size: 22px; font-weight: 400; }
-.side-pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--bk); animation: pulse 2s ease-in-out infinite; }
-.side-section { font-size: 10px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mu); margin: 14px 0 10px; }
-.side-section:first-child { margin-top: 0; }
-
-.si-item { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--b1); gap: 8px; }
-.si-item:last-of-type { border-bottom: none; }
-.si-info { min-width: 0; flex: 1; }
-.si-name-row { display: flex; align-items: center; gap: 7px; }
-.si-overdue-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bk); animation: pulse 1.6s ease-in-out infinite; flex-shrink: 0; }
-.si-n { font-size: 14px; font-weight: 600; }
-.si-m { font-size: 11px; color: var(--mu); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.si-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.si-pill { font-size: 11px; font-weight: 700; padding: 4px 9px; border: 1px solid var(--b2); border-radius: 5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.si-pill.ov { border-color: var(--bk); color: var(--bk); }
-.si-action { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; padding: 0; transition: color .12s; white-space: nowrap; }
-.si-action:hover { color: var(--bk); }
-.si-at-r { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; gap: 8px; border-bottom: 1px solid var(--b1); }
-.si-at-r:last-child { border-bottom: none; }
-.si-at-n { font-size: 13px; font-weight: 500; color: var(--mu); flex: 1; }
-.si-at-t { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mu); padding: 3px 8px; border: 1px solid var(--b1); border-radius: 4px; }
-.side-empty { text-align: center; padding: 16px 0; font-size: 12px; color: var(--mu); }
-.side-refresh { font-size: 10px; color: var(--mu); margin-top: 14px; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: .3px; }
-
-.summary-toggle { display: inline-flex; padding: 4px; border: 1px solid var(--b1); border-radius: 10px; background: var(--off); margin-bottom: 28px; }
-.st-btn { padding: 9px 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; border: none; background: transparent; color: var(--mu); cursor: pointer; border-radius: 7px; transition: all .12s; }
-.st-btn.on { background: var(--w); color: var(--bk); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-.period-row { display: flex; gap: 8px; margin-bottom: 28px; }
-.pb { padding: 10px 18px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; border: 1px solid var(--b1); border-radius: 7px; background: var(--w); color: var(--mu); cursor: pointer; transition: all .12s; }
-.pb.on { border-color: var(--bk); background: var(--bk); color: var(--w); }
-.pb:hover:not(.on) { color: var(--dk); border-color: var(--b2); }
-.stats3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
-.sb { padding: 22px 18px; border: 1px solid var(--b1); border-radius: var(--rad); }
-.sb-n { font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.sb-l { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; color: var(--mu); margin-top: 6px; }
-.sm { padding: 20px 0; border-bottom: 1px solid var(--b1); }
-.sm:last-child { border-bottom: none; }
-.sm-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-.sm-n { font-size: 16px; font-weight: 700; }
-.sm-v { font-size: 13px; font-weight: 600; color: var(--mi); font-variant-numeric: tabular-nums; }
-.sm-bar { height: 3px; background: var(--b1); border-radius: 2px; margin-bottom: 12px; }
-.sm-fill { height: 100%; background: var(--bk); border-radius: 2px; transition: width .5s ease; }
-.sm-types { display: flex; flex-wrap: wrap; gap: 6px; }
-.sm-ty { font-size: 11px; font-weight: 600; color: var(--mi); padding: 4px 10px; border: 1px solid var(--b1); border-radius: 5px; }
-
-.rl-item { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--b1); }
-.rl-item:last-child { border-bottom: none; }
-.rl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--b2); }
-.rl-info { font-size: 14px; font-weight: 500; }
-.rl-sub { font-size: 12px; color: var(--mu); margin-top: 3px; }
-.rl-dur { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--mi); }
-
-.divider { border: none; border-top: 1px solid var(--b1); margin: 24px 0; }
-.empty { padding: 40px 0; text-align: center; font-size: 14px; color: var(--mu); }
-
-/* ── Modal ── */
-.mo-overlay { position: fixed; inset: 0; background: rgba(12,12,12,.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.mo-overlay.on { display: flex; animation: fadeIn .2s ease; }
-.mo { background: var(--w); border-radius: 14px; padding: 28px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: slideUp .25s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.mo-eye { font-size: 10px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mu); margin-bottom: 6px; }
-.mo-title { font-family: var(--serif); font-size: 22px; font-weight: 400; margin-bottom: 6px; }
-.mo-sub { font-size: 13px; color: var(--mi); margin-bottom: 20px; line-height: 1.45; }
-.mo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-.mo .btn { padding: 14px 18px; font-size: 12px; }
-.mo-bg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
-.mo-bc { padding: 14px; border: 1px solid var(--b1); border-radius: 10px; background: var(--w); cursor: pointer; transition: all .12s; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--dk); text-align: left; }
-.mo-bc:hover { border-color: var(--b2); background: var(--off); }
-.mo-bc.sel { border-color: var(--bk); background: var(--bk); color: var(--w); }
-
-.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(14px); opacity: 0; background: var(--bk); color: var(--w); font-size: 13px; font-weight: 600; letter-spacing: .4px; padding: 12px 22px; border-radius: 9px; transition: all .22s ease; z-index: 99; pointer-events: none; white-space: nowrap; }
-.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.sp { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: rgba(255,255,255,.85); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 7px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: .4; transform: scale(.8); }
-}
-
-@media (max-width: 600px) {
-  #app { padding: 0 20px 80px; }
-  .hd { padding: 44px 0 28px; margin-bottom: 28px; }
-  .hd-title { font-size: 32px; }
-  .bg, .stats3, .mo-bg { grid-template-columns: 1fr 1fr; }
-  .stat-divider { display: none; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Team Break Tracker">
+  <meta name="theme-color" content="#09090f">
+  <title>Break Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-<div id="app">
 
-  <!-- ═══ LOGIN ═══ -->
-  <div id="s-login" class="screen on">
-    <div class="hd">
-      <div class="hd-eye">Team Operations</div>
-      <div class="hd-title">Break Tracker</div>
-      <div class="hd-sub" id="login-clock">--:--:--</div>
-    </div>
-    <div class="lbl">Select Your Name</div>
-    <div class="mg" id="login-members"></div>
-
-    <div id="pin-wrap" class="pin-wrap" style="display:none">
-      <div class="lbl" style="text-align:center;margin-bottom:18px" id="pin-greeting">Enter your PIN</div>
-      <input type="password" id="pin-input" class="pin-input"
-             inputmode="numeric" pattern="[0-9]*" maxlength="4"
-             autocomplete="off" autocorrect="off" spellcheck="false" placeholder="••••">
-      <div class="pin-hint">Type your PIN or use the keypad</div>
-      <div class="pin-grid">
-        <button class="pk" onclick="pk('1')">1</button>
-        <button class="pk" onclick="pk('2')">2</button>
-        <button class="pk" onclick="pk('3')">3</button>
-        <button class="pk" onclick="pk('4')">4</button>
-        <button class="pk" onclick="pk('5')">5</button>
-        <button class="pk" onclick="pk('6')">6</button>
-        <button class="pk" onclick="pk('7')">7</button>
-        <button class="pk" onclick="pk('8')">8</button>
-        <button class="pk" onclick="pk('9')">9</button>
-        <button class="pk" onclick="pc()">C</button>
-        <button class="pk" onclick="pk('0')">0</button>
-        <button class="pk del" onclick="pd()">&#9003;</button>
+  <!-- Screen 1: Login -->
+  <div id="s-login" class="screen active">
+    <div class="login-container">
+      <h1 class="login-title">Break Tracker</h1>
+      <p class="login-subtitle">Select your name to sign in</p>
+      <div id="login-clock" class="login-clock">--:--:--</div>
+      
+      <div id="member-grid" class="member-grid">
+        <!-- Members populated by JS -->
       </div>
-      <div class="pin-err" id="pin-err"></div>
-      <button class="pin-back" onclick="backToNames()">Change Name</button>
+      
+      <div id="pin-panel" class="pin-panel">
+        <h2 id="pin-label" class="pin-label">Enter PIN for Name</h2>
+        
+        <div class="pin-display">
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+        </div>
+        
+        <div id="pin-error" class="warning-text" style="margin-top:-16px; margin-bottom:16px;"></div>
+        
+        <div class="keypad">
+          <button class="key" data-key="1">1</button>
+          <button class="key" data-key="2">2</button>
+          <button class="key" data-key="3">3</button>
+          <button class="key" data-key="4">4</button>
+          <button class="key" data-key="5">5</button>
+          <button class="key" data-key="6">6</button>
+          <button class="key" data-key="7">7</button>
+          <button class="key" data-key="8">8</button>
+          <button class="key" data-key="9">9</button>
+          <button class="key action" data-key="C">C</button>
+          <button class="key" data-key="0">0</button>
+          <button class="key action" data-key="B">⌫</button>
+        </div>
+        
+        <button id="btn-back-login" class="btn-secondary">Change name</button>
+      </div>
     </div>
   </div>
 
-  <!-- ═══ APP ═══ -->
+  <!-- Screen 2: App -->
   <div id="s-app" class="screen">
-    <div class="hd">
-      <div class="hd-row">
+    <header class="app-header">
+      <div class="user-badge">
+        <div id="user-avatar" class="avatar">U</div>
         <div>
-          <div class="hd-eye">Team Operations</div>
-          <div class="hd-title">Break Tracker</div>
+          <span id="user-name" style="font-weight:600">User</span>
+          <span id="user-admin-chip" class="pill accent" style="display:none; margin-left:8px; font-size:0.75rem;">Admin</span>
         </div>
-        <div class="hd-sub" id="app-clock">--:--:--</div>
       </div>
-    </div>
+      <div id="header-clock" class="live-clock">12:00:00</div>
+      <button id="btn-signout" class="btn-secondary">Sign Out</button>
+    </header>
 
-    <div class="badge-row">
-      <div class="badge-member">
-        <span id="badge-init" class="badge-init"></span>
-        <span id="badge-name"></span>
-        <span class="admin-chip" id="admin-chip" style="display:none">Admin</span>
-      </div>
-      <button class="icon-btn" id="notif-btn" onclick="enableNotifs()" style="display:none">Enable Alerts</button>
-      <button class="icon-btn" style="margin-left:auto" onclick="logout()">Sign Out</button>
-    </div>
+    <nav id="nav-tabs" class="nav-tabs" style="display:none;">
+      <button class="tab active" data-target="view-breaks">My Breaks</button>
+      <button class="tab" data-target="view-dashboard">Team Dashboard</button>
+    </nav>
 
-    <div id="admin-toggle" style="display:none">
-      <div class="summary-toggle">
-        <button class="st-btn on" onclick="setView('main')"    id="view-main">Log Break</button>
-        <button class="st-btn"    onclick="setView('summary')" id="view-summary">Summary</button>
-      </div>
-    </div>
-
-    <div id="view-main-area">
-      <div class="layout">
-        <div class="main">
-          <div class="stat-strip" id="stat-strip" style="display:none">
-            <div class="stat-cell">
-              <div class="stat-cell-l">Today</div>
-              <div class="stat-cell-v" id="stat-count">0 breaks</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-cell">
-              <div class="stat-cell-l">Total time</div>
-              <div class="stat-cell-v" id="stat-total">0 min</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-cell">
-              <div class="stat-cell-l">Last break</div>
-              <div class="stat-cell-v" id="stat-last">—</div>
-            </div>
-          </div>
-
-          <div id="ui-start">
-            <div class="lbl">Type of Break</div>
-            <div class="bg">
-              <button class="bc" data-type="Coffee"        onclick="selBreak('Coffee')">Coffee<div class="bc-sub">Coffee break</div></button>
-              <button class="bc" data-type="Phone Call" onclick="selBreak('Phone Call')">Phone<div class="bc-sub">Phone Call</div></button>
-              <button class="bc" data-type="Prayer"        onclick="selBreak('Prayer')">Prayer<div class="bc-sub">Prayer break</div></button>
-              <button class="bc" data-type="Other"         onclick="selBreak('Other')">Other<div class="bc-sub">Any other reason</div></button>
-            </div>
-            <button class="btn btn-k" id="btn-start" onclick="doStart()" disabled>Select a break type</button>
-          </div>
-
-          <div id="ui-end" style="display:none">
-            <div class="ap" id="active-panel">
-              <div class="ap-r"><span class="ap-l">Break Type</span><span class="ap-v" id="ae-type">—</span></div>
-              <div class="ap-r"><span class="ap-l">Started At</span><span class="ap-v" id="ae-start">—</span></div>
-              <div class="ap-r" style="justify-content:center;padding:28px 22px;"><span class="ap-t" id="ae-timer">00:00</span></div>
-              <div class="ap-warn" id="ap-warn" style="display:none">
-                <div class="ap-warn-dot"></div>
-                <div class="ap-warn-text">This break has exceeded the standard 15-minute limit</div>
+    <main class="app-layout">
+      <!-- My Breaks View -->
+      <div id="view-breaks" class="view active">
+        <div class="main-content">
+          <div class="left-col">
+            <!-- Stats -->
+            <div class="stats-strip">
+              <div class="stat-card">
+                <div class="stat-label">Today's Breaks</div>
+                <div id="stat-count" class="stat-value">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Time</div>
+                <div id="stat-total" class="stat-value">0m</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Avg Duration</div>
+                <div id="stat-avg" class="stat-value">0m</div>
               </div>
             </div>
-            <button class="btn btn-o" onclick="doEnd()">Back to Post</button>
-          </div>
-        </div>
 
-        <aside class="side">
-          <div class="side-card">
-            <div class="side-head">
-              <div class="side-title">Team</div>
-              <div class="side-pulse" title="Live"></div>
+            <!-- Action Area -->
+            <div id="break-action-area" class="break-action-area">
+              
+              <!-- Start Break UI -->
+              <div id="ui-start-break" class="active">
+                <h2 class="section-title">Start a Break</h2>
+                <div id="break-types" class="break-type-grid">
+                  <!-- JS populated -->
+                </div>
+                <button id="btn-start-break" class="btn-primary" style="width:100%" disabled>Start Break</button>
+              </div>
+
+              <!-- Active Break UI -->
+              <div id="ui-active-break" class="active-break-panel">
+                <div class="timer-meta">
+                  <span id="active-break-type" class="pill amber">Coffee</span>
+                  <span id="active-break-start">Started at 10:00</span>
+                </div>
+                <div id="active-timer" class="timer-display">00:00</div>
+                <div class="warning-text">Break is exceeding 15 minutes!</div>
+                <button id="btn-end-break" class="btn-primary" style="width:100%; margin-top:16px;">End Break</button>
+              </div>
+
             </div>
-            <div id="side-content"><div class="side-empty">Loading...</div></div>
-            <div class="side-refresh" id="side-refresh">Auto-refresh in 20s</div>
+
+            <!-- History -->
+            <div class="history-section">
+              <h2 class="section-title">My Break History</h2>
+              <div class="period-pills" id="history-pills">
+                <button class="period-pill active" data-period="today">Today</button>
+                <button class="period-pill" data-period="week">This Week</button>
+                <button class="period-pill" data-period="month">This Month</button>
+              </div>
+              <div id="history-list" class="history-list">
+                <!-- JS populated -->
+                <div class="skeleton" style="height: 64px; width:100%;"></div>
+                <div class="skeleton" style="height: 64px; width:100%;"></div>
+              </div>
+            </div>
           </div>
-        </aside>
+
+          <!-- Sidebar -->
+          <aside class="sidebar">
+            <div class="team-status-card">
+              <div class="team-status-header">
+                <h2 class="section-title" style="margin:0;">Team Status</h2>
+                <div class="dot green"></div>
+              </div>
+              
+              <div class="status-section">
+                <div class="status-section-title" id="title-on-break">On Break (0)</div>
+                <div id="list-on-break" class="member-list">
+                  <!-- JS populated -->
+                  <div class="empty-state" style="padding:20px; font-size:0.9rem;">No one on break</div>
+                </div>
+              </div>
+
+              <div class="status-section">
+                <div class="status-section-title" id="title-at-post">At Post (0)</div>
+                <div id="list-at-post" class="member-list">
+                  <!-- JS populated -->
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
 
-    <div id="view-summary-area" style="display:none">
-      <div class="period-row">
-        <button class="pb on" onclick="loadSummary('today')"  id="pb-today">Today</button>
-        <button class="pb"    onclick="loadSummary('week')"   id="pb-week">Week</button>
-        <button class="pb"    onclick="loadSummary('month')"  id="pb-month">Month</button>
-      </div>
-      <div id="summary-content"><div class="empty">Loading...</div></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══ ADMIN MODAL: Start break for member ═══ -->
-<div class="mo-overlay" id="mo-start">
-  <div class="mo">
-    <div class="mo-eye">Admin Action</div>
-    <div class="mo-title">Log Break for <span id="mo-start-name">—</span></div>
-    <div class="mo-sub">Choose the break type. This will be recorded under their name.</div>
-    <div class="mo-bg">
-      <button class="mo-bc" data-mtype="Coffee"        onclick="moSelType('Coffee')">Coffee</button>
-      <button class="mo-bc" data-mtype="Restroom (WC)" onclick="moSelType('Restroom (WC)')">Restroom (WC)</button>
-      <button class="mo-bc" data-mtype="Prayer"        onclick="moSelType('Prayer')">Prayer</button>
-      <button class="mo-bc" data-mtype="Other"         onclick="moSelType('Other')">Other</button>
-    </div>
-    <div class="mo-actions">
-      <button class="btn btn-g" onclick="closeStartModal()">Cancel</button>
-      <button class="btn btn-k" id="mo-start-confirm" onclick="confirmAdminStart()" disabled>Start Break</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ ADMIN MODAL: End break for member ═══ -->
-<div class="mo-overlay" id="mo-end">
-  <div class="mo">
-    <div class="mo-eye">Admin Action</div>
-    <div class="mo-title">End <span id="mo-end-name">—</span>'s Break?</div>
-    <div class="mo-sub" id="mo-end-detail">—</div>
-    <div class="mo-actions">
-      <button class="btn btn-g" onclick="closeEndModal()">Cancel</button>
-      <button class="btn btn-o" onclick="confirmAdminEnd()">End Break</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const API = window.location.hostname === 'localhost' ? 'http://localhost:8888/api' : '/api';
-const MEMBERS = ['Oumaima','Charif','Khalid','Imane'];
-const ADMIN   = 'Akram';
-const POLL_MS  = 20000;
-const WARN_MIN = 15;
-
-let session     = JSON.parse(localStorage.getItem('bt_session') || 'null');
-let loginMember = null;
-let loginPin    = '';
-let selBrk      = null;
-let timerInt    = null;
-let pollInt     = null;
-let pollCountdown = POLL_MS / 1000;
-let curPeriod   = 'today';
-let activeList  = [];
-let notified    = new Set();
-
-// Admin modal state
-let modalTarget = null;
-let modalType   = null;
-
-function tickClock() {
-  const t = new Date().toLocaleTimeString('en-GB', { hour12: false });
-  const a = document.getElementById('app-clock');
-  const b = document.getElementById('login-clock');
-  if (a) a.textContent = t;
-  if (b) b.textContent = t;
-}
-setInterval(tickClock, 1000); tickClock();
-
-async function api(path, opts = {}) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (session) headers['Authorization'] = `Bearer ${session.member}:${session.token}`;
-  try {
-    const r = await fetch(API + path, { ...opts, headers: { ...headers, ...(opts.headers || {}) } });
-    return await r.json();
-  } catch { return { error: 'Network error' }; }
-}
-
-function init() {
-  buildLoginGrid();
-  bindPinInput();
-  if (session) loadApp();
-}
-
-function buildLoginGrid() {
-  const all = [...MEMBERS, ADMIN];
-  const g = document.getElementById('login-members');
-  g.innerHTML = '';
-  all.forEach(name => {
-    const b = document.createElement('button');
-    b.className = 'mc'; b.id = 'lm-' + name;
-    b.onclick = () => pickLoginMember(name);
-    b.innerHTML = `<div class="mc-init">${initials(name)}</div>
-      <div><div class="mc-n">${name}</div><div class="mc-s">Select</div></div>`;
-    g.appendChild(b);
-  });
-}
-
-function pickLoginMember(name) {
-  loginMember = name; loginPin = '';
-  document.querySelectorAll('.mc').forEach(c => c.classList.remove('sel'));
-  document.getElementById('lm-' + name)?.classList.add('sel');
-  document.getElementById('pin-greeting').textContent = `PIN for ${name}`;
-  document.getElementById('pin-err').textContent = '';
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-wrap').style.display = 'block';
-  setTimeout(() => document.getElementById('pin-input').focus(), 100);
-}
-
-function backToNames() {
-  loginMember = null; loginPin = '';
-  document.querySelectorAll('.mc').forEach(c => c.classList.remove('sel'));
-  document.getElementById('pin-wrap').style.display = 'none';
-}
-
-function bindPinInput() {
-  const input = document.getElementById('pin-input');
-  input.addEventListener('input', e => {
-    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 4);
-    e.target.value = cleaned;
-    loginPin = cleaned;
-    document.getElementById('pin-err').textContent = '';
-    if (loginPin.length === 4) doLogin();
-  });
-  input.addEventListener('keydown', e => { if (e.key === 'Enter' && loginPin.length === 4) doLogin(); });
-}
-
-function pk(k) { if (loginPin.length >= 4) return; loginPin += k; document.getElementById('pin-input').value = loginPin; if (loginPin.length === 4) doLogin(); }
-function pd() { loginPin = loginPin.slice(0,-1); document.getElementById('pin-input').value = loginPin; document.getElementById('pin-err').textContent = ''; }
-function pc() { loginPin = ''; document.getElementById('pin-input').value = ''; document.getElementById('pin-err').textContent = ''; }
-
-async function doLogin() {
-  const res = await api('/login', { method: 'POST', body: JSON.stringify({ member: loginMember, pin: loginPin }) });
-  if (res.error) {
-    document.getElementById('pin-err').textContent = 'Incorrect PIN — try again.';
-    const input = document.getElementById('pin-input');
-    input.style.borderColor = '#111';
-    setTimeout(() => { input.style.borderColor = ''; }, 380);
-    setTimeout(() => { loginPin = ''; input.value = ''; input.focus(); }, 460);
-    return;
-  }
-  session = { member: res.member, token: res.token, isAdmin: res.isAdmin };
-  localStorage.setItem('bt_session', JSON.stringify(session));
-  loadApp();
-}
-
-function logout() {
-  session = null;
-  localStorage.removeItem('bt_session');
-  selBrk = null; activeList = []; notified = new Set();
-  clearInterval(timerInt); clearInterval(pollInt);
-  document.title = 'Break Tracker';
-  show('s-login'); hide('s-app');
-  backToNames();
-}
-
-async function loadApp() {
-  show('s-app'); hide('s-login');
-  document.getElementById('badge-init').textContent = initials(session.member);
-  document.getElementById('badge-name').textContent = session.member;
-  if (session.isAdmin) {
-    document.getElementById('admin-toggle').style.display = 'block';
-    document.getElementById('admin-chip').style.display   = 'inline-block';
-  }
-  if ('Notification' in window && Notification.permission === 'default') {
-    document.getElementById('notif-btn').style.display = 'inline-block';
-  }
-  const me = await api('/me');
-  if (me.onBreak && me.breakInfo) showEndUI(me.breakInfo);
-  else showStartUI();
-
-  loadPersonalStats();
-  loadSideStatus();
-  startPolling();
-}
-
-function setView(name) {
-  document.querySelectorAll('.st-btn').forEach(b => b.classList.remove('on'));
-  document.getElementById('view-' + name).classList.add('on');
-  document.getElementById('view-main-area').style.display    = name === 'main'    ? 'block' : 'none';
-  document.getElementById('view-summary-area').style.display = name === 'summary' ? 'block' : 'none';
-  if (name === 'summary') loadSummary(curPeriod);
-}
-
-async function loadPersonalStats() {
-  const res = await api('/me/stats?period=today');
-  if (res.error) return;
-  document.getElementById('stat-strip').style.display = 'flex';
-  document.getElementById('stat-count').textContent = `${res.count} break${res.count === 1 ? '' : 's'}`;
-  document.getElementById('stat-total').textContent = `${res.totalMins} min`;
-  document.getElementById('stat-last').textContent = res.lastBreak ? `${res.lastBreak.type} · ${res.lastBreak.time}` : 'None yet';
-}
-
-function selBreak(t) {
-  selBrk = t;
-  document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
-  document.querySelector(`.bc[data-type="${t}"]`)?.classList.add('sel');
-  const b = document.getElementById('btn-start');
-  b.disabled = false;
-  b.textContent = 'Start Break';
-}
-
-function showStartUI() {
-  document.getElementById('ui-start').style.display = 'block';
-  document.getElementById('ui-end').style.display   = 'none';
-  selBrk = null;
-  document.querySelectorAll('.bc').forEach(b => b.classList.remove('sel'));
-  const btn = document.getElementById('btn-start');
-  btn.disabled = true; btn.textContent = 'Select a break type';
-  clearInterval(timerInt);
-}
-
-function showEndUI(info) {
-  document.getElementById('ui-start').style.display = 'none';
-  document.getElementById('ui-end').style.display   = 'block';
-  document.getElementById('ae-type').textContent  = info.breakType;
-  document.getElementById('ae-start').textContent = info.startTime;
-  startTimer(info.startTs);
-}
-
-function startTimer(ts) {
-  clearInterval(timerInt);
-  const el = document.getElementById('ae-timer');
-  const panel = document.getElementById('active-panel');
-  const warning = document.getElementById('ap-warn');
-  timerInt = setInterval(() => {
-    const s = Math.floor((Date.now() - ts) / 1000);
-    el.textContent = pad(Math.floor(s/60)) + ':' + pad(s%60);
-    if (s >= WARN_MIN * 60) { panel.classList.add('long'); warning.style.display = 'flex'; }
-    else { panel.classList.remove('long'); warning.style.display = 'none'; }
-  }, 1000);
-}
-
-async function doStart() {
-  if (!selBrk) return;
-  const btn = document.getElementById('btn-start');
-  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Logging...';
-  const now = new Date();
-  showEndUI({ breakType: selBrk, startTime: toTimeStr(now), startTs: now.getTime() });
-  toast('Break started');
-  const res = await api('/break/start', { method: 'POST', body: JSON.stringify({ breakType: selBrk }) });
-  if (res.error) { showStartUI(); toast(res.error); }
-  loadSideStatus();
-}
-
-async function doEnd() {
-  const btn = document.querySelector('.btn-o');
-  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Saving...';
-  showStartUI();
-  toast('Saved — returning...');
-  const res = await api('/break/end', { method: 'POST' });
-  if (res.error) toast(res.error);
-  else toast('Saved — ' + res.duration + ' min');
-  loadPersonalStats();
-  loadSideStatus();
-}
-
-// ─── SIDE / TEAM ─────────────────────────────────────────────
-async function loadSideStatus() {
-  const res = await api('/breaks/active');
-  if (res.error) {
-    document.getElementById('side-content').innerHTML = '<div class="side-empty">Failed to load.</div>';
-    return;
-  }
-  activeList = res.active || [];
-  renderSide();
-  checkNotifications();
-  updateTabTitle();
-}
-
-function renderSide() {
-  const allMembers = [...MEMBERS, ADMIN];
-  const onNames    = activeList.map(a => a.member);
-  const atPost     = allMembers.filter(m => !onNames.includes(m));
-  const el = document.getElementById('side-content');
-
-  let html = '';
-  if (activeList.length) {
-    html += `<div class="side-section">On Break (${activeList.length})</div>`;
-    activeList.forEach(a => {
-      const elapsed = Math.floor((Date.now() - a.startTs) / 60000);
-      const over    = elapsed >= WARN_MIN;
-      const canManage = session.isAdmin && a.member !== session.member;
-      html += `<div class="si-item">
-        <div class="si-info">
-          <div class="si-name-row">
-            ${over ? '<span class="si-overdue-dot"></span>' : ''}
-            <span class="si-n">${a.member}</span>
+      <!-- Team Dashboard View -->
+      <div id="view-dashboard" class="view">
+        <div class="main-content" style="grid-template-columns: 1fr;">
+          <div class="period-pills" id="summary-pills">
+            <button class="period-pill active" data-period="today">Today</button>
+            <button class="period-pill" data-period="week">This Week</button>
+            <button class="period-pill" data-period="month">This Month</button>
           </div>
-          <div class="si-m">${a.breakType} · ${a.startTime}</div>
+
+          <div class="stats-strip">
+            <div class="stat-card">
+              <div class="stat-label">Total Team Breaks</div>
+              <div id="sum-count" class="stat-value">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Time</div>
+              <div id="sum-total" class="stat-value">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Avg Duration</div>
+              <div id="sum-avg" class="stat-value">-</div>
+            </div>
+          </div>
+
+          <div class="team-breakdown">
+            <h2 class="section-title">Team Breakdown</h2>
+            <div id="summary-bars">
+              <!-- JS populated -->
+            </div>
+          </div>
+
+          <div class="recent-activity">
+            <h2 class="section-title">Recent Activity</h2>
+            <div id="summary-recent" class="history-list">
+              <!-- JS populated -->
+            </div>
+          </div>
         </div>
-        <div class="si-right">
-          <div class="si-pill ${over ? 'ov' : ''}">${elapsed}&thinsp;m</div>
-          ${canManage ? `<button class="si-action" onclick="openEndModal('${a.member}')">End</button>` : ''}
-        </div>
-      </div>`;
-    });
-  }
-  if (atPost.length) {
-    html += `<div class="side-section">At Post (${atPost.length})</div>`;
-    atPost.forEach(m => {
-      const canManage = session.isAdmin && m !== session.member;
-      html += `<div class="si-at-r">
-        <span class="si-at-n">${m}</span>
-        ${canManage
-          ? `<button class="si-action" onclick="openStartModal('${m}')">Log Break</button>`
-          : `<span class="si-at-t">At Post</span>`}
-      </div>`;
-    });
-  }
-  el.innerHTML = html || '<div class="side-empty">Everyone is at their post</div>';
-}
-
-// ─── POLLING ─────────────────────────────────────────────────
-function startPolling() {
-  clearInterval(pollInt);
-  pollCountdown = POLL_MS / 1000;
-  pollInt = setInterval(() => {
-    pollCountdown--;
-    document.getElementById('side-refresh').textContent =
-      pollCountdown > 0 ? `Auto-refresh in ${pollCountdown}s` : 'Refreshing...';
-    if (pollCountdown <= 0) {
-      pollCountdown = POLL_MS / 1000;
-      loadSideStatus();
-    } else {
-      renderSide();
-      updateTabTitle();
-      checkNotifications();
-    }
-  }, 1000);
-}
-
-// ─── NOTIFICATIONS ───────────────────────────────────────────
-function enableNotifs() {
-  if (!('Notification' in window)) { toast('Notifications not supported'); return; }
-  Notification.requestPermission().then(perm => {
-    if (perm === 'granted') {
-      toast('Alerts enabled');
-      document.getElementById('notif-btn').style.display = 'none';
-    } else { toast('Alerts denied'); }
-  });
-}
-
-function checkNotifications() {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  activeList.forEach(a => {
-    const elapsed = Math.floor((Date.now() - a.startTs) / 60000);
-    const key = `${a.member}:${a.startTs}`;
-    if (elapsed >= WARN_MIN && !notified.has(key)) {
-      notified.add(key);
-      new Notification('Break exceeds 15 min', {
-        body: `${a.member} — ${a.breakType} · ${elapsed} min`, tag: key
-      });
-    }
-  });
-}
-
-function updateTabTitle() {
-  const over = activeList.filter(a => Math.floor((Date.now() - a.startTs) / 60000) >= WARN_MIN);
-  document.title = over.length ? `(${over.length}) Break Tracker` : 'Break Tracker';
-}
-
-// ─── ADMIN MODALS ────────────────────────────────────────────
-function openStartModal(memberName) {
-  modalTarget = memberName;
-  modalType   = null;
-  document.getElementById('mo-start-name').textContent = memberName;
-  document.querySelectorAll('.mo-bc').forEach(b => b.classList.remove('sel'));
-  document.getElementById('mo-start-confirm').disabled = true;
-  document.getElementById('mo-start').classList.add('on');
-}
-
-function closeStartModal() {
-  document.getElementById('mo-start').classList.remove('on');
-  modalTarget = null; modalType = null;
-}
-
-function moSelType(t) {
-  modalType = t;
-  document.querySelectorAll('.mo-bc').forEach(b => b.classList.remove('sel'));
-  document.querySelector(`.mo-bc[data-mtype="${t}"]`)?.classList.add('sel');
-  document.getElementById('mo-start-confirm').disabled = false;
-}
-
-async function confirmAdminStart() {
-  if (!modalTarget || !modalType) return;
-  const btn = document.getElementById('mo-start-confirm');
-  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Starting...';
-  const res = await api('/break/start', {
-    method: 'POST',
-    body: JSON.stringify({ breakType: modalType, targetMember: modalTarget })
-  });
-  if (res.error) { toast(res.error); btn.disabled = false; btn.textContent = 'Start Break'; return; }
-  toast(`Break started for ${modalTarget}`);
-  closeStartModal();
-  loadSideStatus();
-}
-
-function openEndModal(memberName) {
-  modalTarget = memberName;
-  const entry = activeList.find(a => a.member === memberName);
-  if (!entry) { toast('Break not found'); return; }
-  const elapsed = Math.floor((Date.now() - entry.startTs) / 60000);
-  document.getElementById('mo-end-name').textContent = memberName;
-  document.getElementById('mo-end-detail').textContent =
-    `${entry.breakType} · started at ${entry.startTime} · ${elapsed} min elapsed`;
-  document.getElementById('mo-end').classList.add('on');
-}
-
-function closeEndModal() {
-  document.getElementById('mo-end').classList.remove('on');
-  modalTarget = null;
-}
-
-async function confirmAdminEnd() {
-  if (!modalTarget) return;
-  const btn = document.querySelector('#mo-end .btn-o');
-  btn.disabled = true; btn.innerHTML = '<span class="sp"></span>Ending...';
-  const res = await api('/break/end', {
-    method: 'POST',
-    body: JSON.stringify({ targetMember: modalTarget })
-  });
-  if (res.error) { toast(res.error); btn.disabled = false; btn.textContent = 'End Break'; return; }
-  toast(`Ended ${modalTarget}'s break — ${res.duration} min`);
-  closeEndModal();
-  loadSideStatus();
-}
-
-// Close modals on overlay click
-document.getElementById('mo-start').addEventListener('click', e => { if (e.target.id === 'mo-start') closeStartModal(); });
-document.getElementById('mo-end').addEventListener('click',   e => { if (e.target.id === 'mo-end')   closeEndModal();   });
-
-// ─── SUMMARY ─────────────────────────────────────────────────
-async function loadSummary(period) {
-  curPeriod = period;
-  document.querySelectorAll('.pb').forEach(b => b.classList.remove('on'));
-  document.getElementById('pb-'+period).classList.add('on');
-  document.getElementById('summary-content').innerHTML = '<div class="empty">Loading...</div>';
-
-  const res = await api('/summary?period=' + period);
-  if (res.error) { document.getElementById('summary-content').innerHTML = '<div class="empty">'+res.error+'</div>'; return; }
-  if (!res.count) { document.getElementById('summary-content').innerHTML = '<div class="empty">No data for this period</div>'; return; }
-
-  const totals = Object.values(res.memberStats);
-  const total  = totals.reduce((s,m) => s+m.total, 0);
-  const avg    = Math.round(total / res.count);
-  const maxT   = Math.max(...totals.map(m => m.total));
-  const sorted = Object.entries(res.memberStats).sort((a,b) => b[1].total - a[1].total);
-
-  let html = `<div class="stats3">
-    <div class="sb"><div class="sb-n">${res.count}</div><div class="sb-l">Breaks</div></div>
-    <div class="sb"><div class="sb-n">${total}m</div><div class="sb-l">Total</div></div>
-    <div class="sb"><div class="sb-n">${avg}m</div><div class="sb-l">Avg</div></div>
-  </div>
-  <div class="lbl">Per Member</div><hr class="divider" style="margin-top:14px;margin-bottom:0">`;
-
-  sorted.forEach(([name, st]) => {
-    const pct   = maxT > 0 ? Math.round(st.total / maxT * 100) : 0;
-    const types = Object.entries(st.types).sort((a,b)=>b[1]-a[1])
-      .map(([t,n]) => `<span class="sm-ty">${t} &times;${n}</span>`).join('');
-    html += `<div class="sm">
-      <div class="sm-top">
-        <span class="sm-n">${name}</span>
-        <span class="sm-v">${st.total}m &middot; ${st.count} break${st.count>1?'s':''} &middot; max ${st.longest}m</span>
       </div>
-      <div class="sm-bar"><div class="sm-fill" style="width:${pct}%"></div></div>
-      <div class="sm-types">${types}</div>
-    </div>`;
-  });
+    </main>
+  </div>
 
-  if (res.recent?.length) {
-    html += `<hr class="divider"><div class="lbl">Recent Entries</div>`;
-    res.recent.slice(0,15).forEach(r => {
-      html += `<div class="rl-item">
-        <div class="rl-dot"></div>
-        <div><div class="rl-info">${r.member} &mdash; ${r.breakType}</div><div class="rl-sub">${r.date} &middot; ${r.startTime} &rarr; ${r.endTime}</div></div>
-        <div class="rl-dur">${r.duration}m</div>
-      </div>`;
-    });
-  }
-  document.getElementById('summary-content').innerHTML = html;
-}
+  <!-- Modals -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+      <h3 id="modal-title" class="modal-title">Action</h3>
+      <p id="modal-desc" class="modal-desc">Description</p>
+      
+      <div id="modal-body"></div>
+      
+      <div class="modal-actions">
+        <button id="modal-cancel" class="btn-secondary">Cancel</button>
+        <button id="modal-confirm" class="btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
 
-function initials(name) { return name.slice(0,2).toUpperCase(); }
-function pad(n) { return String(n).padStart(2,'0'); }
-function toTimeStr(d) { return d.toLocaleTimeString('en-GB', { hour12: false }); }
-function show(id) { document.getElementById(id)?.classList.add('on'); }
-function hide(id) { document.getElementById(id)?.classList.remove('on'); }
+  <!-- Toast -->
+  <div id="toast" class="toast-container">
+    <span id="toast-msg">Notification</span>
+  </div>
 
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('on');
-  setTimeout(() => el.classList.remove('on'), 2600);
-}
-
-init();
-</script>
 </body>
 </html>

@@ -5,8 +5,14 @@ const crypto     = require('crypto');
 
 const SHEET_ID    = () => process.env.GOOGLE_SHEET_ID;
 const LOG_RANGE   = 'Log!A:G';
-const ACTIVE_CELL = 'Active!A1';
+const ACTIVE_RANGE = 'Active!A:B';
 const LOG_HEADER  = ['Date','Member','Break Type','Start Time','End Time','Duration (mins)','Day of Week'];
+
+const TZ = 'Africa/Casablanca';
+const toDateStr = d => d.toLocaleDateString('en-GB', { timeZone: TZ });
+const toTimeStr = d => d.toLocaleTimeString('en-GB', { hour12: false, timeZone: TZ });
+const toDayStr = d => d.toLocaleDateString('en-GB', { weekday: 'long', timeZone: TZ });
+function parseDateStr(s) { const [dd,mm,yyyy] = s.split('/'); return new Date(yyyy, mm-1, dd); }
 
 function getSheets() {
   const auth = new google.auth.JWT(
@@ -43,33 +49,71 @@ function getAuth(event) {
 
 async function readActive(sheets) {
   try {
-    const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: ACTIVE_CELL });
-    const raw = (res.data.values?.[0]?.[0] || '').trim();
-    return raw ? JSON.parse(raw) : {};
-  } catch { return {}; }
-}
-
-async function writeActive(sheets, data) {
-  await sheets.spreadsheets.values.update({
-    spreadsheetId: SHEET_ID(), range: ACTIVE_CELL,
-    valueInputOption: 'RAW',
-    requestBody: { values: [[JSON.stringify(data)]] }
-  });
-}
-
-async function ensureLogHeader(sheets) {
-  const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: 'Log!A1:G1' });
-  if (!res.data.values?.length) {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SHEET_ID(), range: 'Log!A1:G1',
-      valueInputOption: 'RAW', requestBody: { values: [LOG_HEADER] }
-    });
+    const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: ACTIVE_RANGE });
+    const rows = res.data.values || [];
+    const active = {};
+    for (const row of rows) {
+      if (row[0] && row[1]) {
+        try { active[row[0]] = JSON.parse(row[1]); } catch(e) {}
+      }
+    }
+    return active;
+  } catch (err) {
+    console.error('Error reading active breaks', err);
+    return {};
   }
 }
 
-const toDateStr = d => d.toLocaleDateString('en-GB');
-const toTimeStr = d => d.toLocaleTimeString('en-GB', { hour12: false });
-function parseDateStr(s) { const [dd,mm,yyyy] = s.split('/'); return new Date(yyyy, mm-1, dd); }
+async function writeActiveForMember(sheets, memberName, data) {
+  let rows = [];
+  try {
+    const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: ACTIVE_RANGE });
+    rows = res.data.values || [];
+  } catch(e) {}
+  
+  let rowIndex = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i][0] === memberName) {
+      rowIndex = i + 1;
+      break;
+    }
+  }
+  
+  const value = data ? JSON.stringify(data) : '';
+  
+  try {
+    if (rowIndex === -1) {
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: SHEET_ID(), range: ACTIVE_RANGE,
+        valueInputOption: 'RAW',
+        requestBody: { values: [[memberName, value]] }
+      });
+    } else {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SHEET_ID(), range: `Active!B${rowIndex}`,
+        valueInputOption: 'RAW',
+        requestBody: { values: [[value]] }
+      });
+    }
+  } catch (err) {
+    console.error('Error writing active break', err);
+    throw new Error('Failed to update active sheet');
+  }
+}
+
+async function ensureLogHeader(sheets) {
+  try {
+    const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: 'Log!A1:G1' });
+    if (!res.data.values?.length) {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SHEET_ID(), range: 'Log!A1:G1',
+        valueInputOption: 'RAW', requestBody: { values: [LOG_HEADER] }
+      });
+    }
+  } catch (err) {
+    console.error('Error ensuring log header', err);
+  }
+}
 
 const CORS = {
   'Content-Type': 'application/json',
@@ -92,31 +136,33 @@ exports.handler = async (event) => {
   const adminName  = process.env.ADMIN_NAME || 'Akram';
   const adminPin   = process.env.ADMIN_PIN  || '9999';
 
+  if (path === '/members' && method === 'GET') {
+    return json(200, { members: Object.keys(memberPins), admin: adminName });
+  }
+
   if (path === '/login' && method === 'POST') {
     const { member, pin } = body;
-    if (!member || !pin) return json(400, { error: 'Member and PIN required' });
+    if (!member || !pin) return json(400, { error: 'Member and PIN required to login' });
     const isAdmin  = member === adminName && pin === adminPin;
     const isMember = !isAdmin && memberPins[member] === pin;
-    if (!isAdmin && !isMember) return json(401, { error: 'Incorrect PIN' });
+    if (!isAdmin && !isMember) return json(401, { error: 'Incorrect PIN provided' });
     return json(200, { member, token: makeToken(member), isAdmin });
   }
 
   const authedMember = getAuth(event);
-  if (!authedMember) return json(401, { error: 'Unauthorized' });
+  if (!authedMember) return json(401, { error: 'Unauthorized access. Token invalid or expired.' });
 
   const isAdmin = authedMember === adminName;
   const sheets  = getSheets();
   const qs      = event.queryStringParameters || {};
 
-  // List of valid member names (admin can act on these)
   const validMembers = new Set([...Object.keys(memberPins), adminName]);
 
-  // Helper: resolve who an action is for. Admin can specify targetMember.
   function resolveTarget() {
     const target = body.targetMember;
     if (!target || target === authedMember) return { member: authedMember, byAdmin: false };
     if (!isAdmin) return { error: 'Only admin can act on behalf of others' };
-    if (!validMembers.has(target)) return { error: 'Invalid target member' };
+    if (!validMembers.has(target)) return { error: 'Invalid target member specified' };
     return { member: target, byAdmin: true };
   }
 
@@ -130,31 +176,71 @@ exports.handler = async (event) => {
       });
     }
 
+    if (path === '/me/history' && method === 'GET') {
+      const period = qs.period || 'today';
+      const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: LOG_RANGE });
+      const rows = (res.data.values || []).slice(1).filter(r => r[0] && r[1] === authedMember);
+      
+      const now = new Date();
+      const todayStr = toDateStr(now);
+      
+      const filtered = rows.filter(r => {
+        if (period === 'today') return r[0] === todayStr;
+        const d = parseDateStr(r[0]);
+        if (period === 'week') {
+          const w = new Date(now); w.setDate(w.getDate()-7);
+          return d >= w;
+        }
+        if (period === 'month') {
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        }
+        return true;
+      });
+      
+      const breaks = filtered.map(r => ({
+        date: r[0], breakType: r[2], startTime: r[3], endTime: r[4], duration: parseInt(r[5]) || 0, day: r[6]
+      })).reverse();
+      
+      return json(200, { breaks });
+    }
+
     if (path === '/me/stats' && method === 'GET') {
       const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: LOG_RANGE });
       const rows = (res.data.values || []).slice(1).filter(r => r[0] && r[1] === authedMember);
-      const today = new Date().toDateString();
-      const todays = rows.filter(r => parseDateStr(r[0]).toDateString() === today);
-      const total = todays.reduce((s, r) => s + (parseInt(r[5]) || 0), 0);
-      const last  = todays[todays.length - 1];
+      
+      const todayStr = toDateStr(new Date());
+      const todays = rows.filter(r => r[0] === todayStr);
+      
+      const totalMins = todays.reduce((s, r) => s + (parseInt(r[5]) || 0), 0);
+      const count = todays.length;
+      const avgMins = count > 0 ? Math.round(totalMins / count) : 0;
+      
+      const typeBreakdown = {};
+      todays.forEach(r => {
+        typeBreakdown[r[2]] = (typeBreakdown[r[2]] || 0) + 1;
+      });
+      
+      const last = todays[todays.length - 1];
       return json(200, {
-        count: todays.length, totalMins: total,
+        count, totalMins, avgMins, typeBreakdown,
         lastBreak: last ? { type: last[2], time: last[4] } : null
       });
     }
 
     if (path === '/break/start' && method === 'POST') {
       const { breakType } = body;
-      if (!breakType) return json(400, { error: 'Break type required' });
+      if (!breakType) return json(400, { error: 'Break type is required to start a break' });
       const r = resolveTarget();
       if (r.error) return json(403, { error: r.error });
       const forMember = r.member;
 
       const active = await readActive(sheets);
       if (active[forMember]) return json(400, { error: `${forMember} already has an active break` });
+      
       const now = new Date();
-      active[forMember] = { breakType, startTime: toTimeStr(now), startTs: now.getTime() };
-      await writeActive(sheets, active);
+      const data = { breakType, startTime: toTimeStr(now), startTs: now.getTime() };
+      await writeActiveForMember(sheets, forMember, data);
+      
       return json(200, { startTime: toTimeStr(now), timestamp: now.getTime(), member: forMember, byAdmin: r.byAdmin });
     }
 
@@ -166,18 +252,21 @@ exports.handler = async (event) => {
       const active = await readActive(sheets);
       const entry  = active[forMember];
       if (!entry) return json(400, { error: `No active break found for ${forMember}` });
+      
       const now = new Date();
       const duration = Math.round((now.getTime() - entry.startTs) / 60000);
+      
       await ensureLogHeader(sheets);
       await sheets.spreadsheets.values.append({
         spreadsheetId: SHEET_ID(), range: LOG_RANGE, valueInputOption: 'RAW',
         requestBody: { values: [[
           toDateStr(now), forMember, entry.breakType, entry.startTime,
-          toTimeStr(now), duration, now.toLocaleDateString('en-GB', { weekday: 'long' })
+          toTimeStr(now), duration, toDayStr(now)
         ]]}
       });
-      delete active[forMember];
-      await writeActive(sheets, active);
+      
+      await writeActiveForMember(sheets, forMember, null);
+      
       return json(200, { duration, endTime: toTimeStr(now), member: forMember, byAdmin: r.byAdmin });
     }
 
@@ -192,38 +281,54 @@ exports.handler = async (event) => {
     }
 
     if (path === '/summary' && method === 'GET') {
-      if (!isAdmin) return json(403, { error: 'Admin access required' });
+      if (!isAdmin) return json(403, { error: 'Admin access required to view summary' });
       const period = qs.period || 'today';
       const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range: LOG_RANGE });
       const rows = (res.data.values || []).slice(1).filter(r => r[0]);
+      
       const now = new Date();
+      const todayStr = toDateStr(now);
+      
       const filtered = rows.filter(r => {
+        if (period === 'today') return r[0] === todayStr;
         const d = parseDateStr(r[0]);
-        if (period === 'today') return d.toDateString() === now.toDateString();
         if (period === 'week')  { const w = new Date(now); w.setDate(w.getDate()-7); return d >= w; }
         if (period === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         return true;
       });
+      
       const memberStats = {};
+      const dailyMap = {};
+      
       filtered.forEach(r => {
+        const dateStr = r[0];
         const m = r[1];
-        if (!memberStats[m]) memberStats[m] = { total: 0, count: 0, types: {}, longest: 0 };
         const mins = parseInt(r[5]) || 0;
+        
+        if (!memberStats[m]) memberStats[m] = { total: 0, count: 0, types: {}, longest: 0 };
         memberStats[m].total += mins;
         memberStats[m].count++;
         memberStats[m].types[r[2]] = (memberStats[m].types[r[2]] || 0) + 1;
         if (mins > memberStats[m].longest) memberStats[m].longest = mins;
+        
+        if (!dailyMap[dateStr]) dailyMap[dateStr] = { date: dateStr, count: 0, totalMins: 0 };
+        dailyMap[dateStr].count++;
+        dailyMap[dateStr].totalMins += mins;
       });
+      
       const recent = filtered.slice(-30).reverse().map(r => ({
         date: r[0], member: r[1], breakType: r[2], startTime: r[3],
         endTime: r[4], duration: parseInt(r[5]) || 0, day: r[6]
       }));
-      return json(200, { count: filtered.length, memberStats, recent });
+      
+      const dailyBreakdown = Object.values(dailyMap).sort((a,b) => parseDateStr(b.date) - parseDateStr(a.date));
+
+      return json(200, { count: filtered.length, memberStats, recent, dailyBreakdown });
     }
 
-    return json(404, { error: 'Route not found' });
+    return json(404, { error: 'API route not found' });
   } catch (err) {
     console.error('[API Error]', err);
-    return json(500, { error: 'Internal server error' });
+    return json(500, { error: 'Internal server error occurred while processing the request' });
   }
 };
