@@ -3,11 +3,11 @@ const API = window.location.hostname === 'localhost' ? 'http://localhost:8888/ap
 const POLL_MS = 15000;
 const WARN_MIN = 15;
 const BREAK_TYPES = [
-  { id: 'Coffee', label: 'Coffee', icon: '☕' },
-  { id: 'Prayer', label: 'Prayer', icon: '🕌' },
-  { id: 'Lunch', label: 'Lunch', icon: '🍽️' },
-  { id: 'Phone Call', label: 'Phone Call', icon: '📞' },
-  { id: 'Other', label: 'Other', icon: '⏸️' }
+  { id: 'Coffee', label: 'Coffee', icon: 'local_cafe' },
+  { id: 'Prayer', label: 'Prayer', icon: 'mosque' },
+  { id: 'Lunch', label: 'Lunch', icon: 'restaurant' },
+  { id: 'Phone Call', label: 'Phone Call', icon: 'call' },
+  { id: 'Other', label: 'Other', icon: 'pause_circle' }
 ];
 
 // ═══ STATE ═══
@@ -286,7 +286,7 @@ function renderBreakTypes() {
   const container = document.getElementById('break-types');
   container.innerHTML = BREAK_TYPES.map(t => `
     <div class="break-type-card" onclick="selectBreakType('${t.id}')" id="bt-${t.id}">
-      <span class="break-type-icon">${t.icon}</span>
+      <span class="break-type-icon material-symbols-rounded">${t.icon}</span>
       <span class="break-type-label">${t.label}</span>
     </div>
   `).join('');
@@ -329,7 +329,7 @@ function setUiActiveBreak(info) {
   show('ui-active-break');
   
   const b = BREAK_TYPES.find(t => t.id === info.breakType) || BREAK_TYPES[4];
-  document.getElementById('active-break-type').innerHTML = `${b.icon} ${b.label}`;
+  document.getElementById('active-break-type').innerHTML = `<span class="material-symbols-rounded" style="font-size:inherit; vertical-align:middle; margin-right:4px;">${b.icon}</span>${b.label}`;
   
   const d = new Date(info.startTs || Date.now());
   document.getElementById('active-break-start').textContent = `Started at ${pad(d.getHours())}:${pad(d.getMinutes())}`;
@@ -451,7 +451,7 @@ function renderHistory(breaks) {
     return `
       <div class="history-item" data-type="${b.breakType}">
         <div class="history-item-left">
-          <div class="history-item-title">${bt.icon} ${b.breakType} <span class="history-item-time">• ${b.date}</span></div>
+          <div class="history-item-title" style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-rounded" style="font-size:18px;">${bt.icon}</span> ${b.breakType} <span class="history-item-time">• ${b.date}</span></div>
           <div class="history-item-time">${b.startTime} &rarr; ${b.endTime || 'Ongoing'}</div>
         </div>
         <div class="pill ${b.duration > 15 ? 'amber' : 'green'}">${formatDuration(b.duration || 0)}</div>
@@ -599,7 +599,7 @@ function openStartModal(member) {
   modalTarget = member;
   modalType = 'start';
   
-  const opts = BREAK_TYPES.map(t => `<option value="${t.id}">${t.icon} ${t.label}</option>`).join('');
+  const opts = BREAK_TYPES.map(t => `<option value="${t.id}">${t.label}</option>`).join('');
   
   document.getElementById('modal-title').textContent = `Start Break for ${member}`;
   document.getElementById('modal-desc').textContent = `Force start a break for this member.`;
